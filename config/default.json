@@ -1,0 +1,5 @@
+{
+  "port": 5000,
+  "mongoUrl": "mongodb+srv://Artemijs:L1keP0neyz1@livechat.zvyjs.mongodb.net/LiveChat?retryWrites=true&w=majority",
+  "jwtSecret": "as20205ag20129"
+}
