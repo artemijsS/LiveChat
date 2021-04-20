@@ -1,0 +1,33 @@
+{
+  "name": "livechat",
+  "version": "1.0.0",
+  "description": "TT2 Practical work",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.5",
+    "nodemon": "^2.0.7",
+    "socket.io": "^4.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "server": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artemijsS/LiveChat.git"
+  },
+  "keywords": [
+    "TT2",
+    "Chat"
+  ],
+  "author": "as20205 ag20129",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/artemijsS/LiveChat/issues"
+  },
+  "homepage": "https://github.com/artemijsS/LiveChat#readme"
+}
