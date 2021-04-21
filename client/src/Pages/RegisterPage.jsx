@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { Helmet } from 'react-helmet';
 import {Link} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
-import {userRegisterFetch} from "../redux/actions/user";
+import {userDataFetch} from "../redux/actions/user";
 import { useAlert } from 'react-alert'
 
 
@@ -25,7 +25,7 @@ function RegisterPage () {
     const submit = event => {
         event.preventDefault()
         setLoading(true)
-        dispatch(userRegisterFetch(form)).then(res => {
+        dispatch(userDataFetch(form,'register')).then(res => {
             setLoading(false)
             if (res) {
                 alert.show(res);

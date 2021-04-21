@@ -10,11 +10,6 @@ const user = (state = initialState, action) => {
                 ...state,
                 userData: action.payload
             }
-        case 'USER_LOADING':
-            return {
-                ...state,
-                loading: action.payload
-            };
         default:
             return state
     }

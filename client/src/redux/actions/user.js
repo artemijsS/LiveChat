@@ -1,35 +1,10 @@
-export const userRegisterFetch = obj => {
-    return dispatch => {
-        return fetch("http://localhost:5000/api/auth/register", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            body: JSON.stringify(obj)
-        })
-            .then(resp => resp.json())
-            .then(data => {
-                if (data.message) {
-                    return data.message
-                } else {
-                    localStorage.setItem("token", data.token)
-                    const user = {
-                        name: data.name,
-                        email: data.email,
-                        telephone: data.telephone,
-                        userId: data.userId,
-                        token: data.token
-                    }
-                    dispatch(loginUser(user))
-                }
-            })
-    }
-}
+import {setUserLoading} from './loading';
 
-export const userLoginFetch = obj => {
+export const userDataFetch = (obj, path) => {
     return dispatch => {
-        return fetch("http://localhost:5000/api/auth/login", {
+        if (path === 'login')
+            dispatch(setUserLoading(true));
+        return fetch(`http://localhost:5000/api/auth/${path}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -39,8 +14,8 @@ export const userLoginFetch = obj => {
         })
             .then(resp => resp.json())
             .then(data => {
-                console.log(data)
                 if (data.message) {
+                    dispatch(setUserLoading(false))
                     return data.message
                 } else {
                     localStorage.setItem("token", data.token)
@@ -52,6 +27,7 @@ export const userLoginFetch = obj => {
                         token: data.token
                     }
                     dispatch(loginUser(user))
+                    dispatch(setUserLoading(false))
                 }
             })
     }
@@ -97,9 +73,4 @@ export const getProfileFetch = () => {
 const loginUser = obj => ({
     type: 'USER_LOGIN',
     payload: obj
-})
-
-const setUserLoading = bool => ({
-    type: 'USER_LOADING',
-    payload: bool
 })

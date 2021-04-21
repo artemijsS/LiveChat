@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import {Link} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {useAlert} from "react-alert";
-import {userLoginFetch} from "../redux/actions/user";
+import {userDataFetch} from "../redux/actions/user";
 
 
 function AuthPage () {
@@ -25,7 +25,7 @@ function AuthPage () {
     const submit = event => {
         event.preventDefault()
         setLoading(true)
-        dispatch(userLoginFetch(form)).then(res => {
+        dispatch(userDataFetch(form,'login')).then(res => {
             setLoading(false)
             if (res) {
                 alert.show(res);
