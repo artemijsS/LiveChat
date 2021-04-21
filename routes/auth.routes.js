@@ -58,7 +58,7 @@ router.post('/register',
                 { expiresIn: '2h' }
             );
 
-            res.json({ token, userId: user.id, user })
+            res.json({ token, name: user.name, email: user.email, userId: user.id, telephone: user.telephone })
 
         } catch (e) {
             res.status(500).json({ message: "Error" })
@@ -102,14 +102,38 @@ router.post('/login',
             const token = jwt.sign(
                 { userId: user.id },
                 config.get('jwtSecret'),
-                { expiresIn: '2h' }
+                { expiresIn: '1h' }
             );
 
-            res.json({ token, userId: user.id, user })
+            res.json({ token, name: user.name, email: user.email, userId: user.id, telephone: user.telephone })
 
         } catch (e) {
             res.status(500).json({ message: "Error" })
         }
     })
+
+// api/auth/check
+router.get('/check', async (req, res) => {
+
+    try {
+        const token = req.headers.authorization.split(' ')[1] // "Bearer TOKEN"
+
+        if (!token) {
+            return res.status(401).json({message: 'No auth'})
+        }
+
+        const userId = jwt.verify(token, config.get('jwtSecret'))
+
+        const user = await User.findById(userId.userId)
+
+        if (!user) {
+            return res.status(401).json({message: 'No auth'})
+        }
+
+        res.json({ name: user.name, email: user.email, userId: user.id, telephone: user.telephone })
+    } catch (e) {
+        res.status(500).json({ message: "Error" })
+    }
+})
 
 module.exports = router;
