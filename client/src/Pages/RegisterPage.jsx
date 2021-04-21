@@ -26,8 +26,8 @@ function RegisterPage () {
         event.preventDefault()
         setLoading(true)
         dispatch(userDataFetch(form,'register')).then(res => {
-            setLoading(false)
             if (res) {
+                setLoading(false)
                 alert.show(res);
             }
         })

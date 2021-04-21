@@ -26,8 +26,8 @@ function AuthPage () {
         event.preventDefault()
         setLoading(true)
         dispatch(userDataFetch(form,'login')).then(res => {
-            setLoading(false)
             if (res) {
+                setLoading(false)
                 alert.show(res);
             }
         })
