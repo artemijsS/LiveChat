@@ -2,8 +2,6 @@ import {setUserLoading} from './loading';
 
 export const userDataFetch = (obj, path) => {
     return dispatch => {
-        if (path === 'login')
-            dispatch(setUserLoading(true));
         return fetch(`http://localhost:5000/api/auth/${path}`, {
             method: "POST",
             headers: {
@@ -67,6 +65,13 @@ export const getProfileFetch = () => {
         } else {
             dispatch(setUserLoading(false))
         }
+    }
+}
+
+export const logoutUser = () => {
+    localStorage.removeItem("token")
+    return {
+        type: 'USER_LOGOUT'
     }
 }
 

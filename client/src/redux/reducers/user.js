@@ -10,6 +10,10 @@ const user = (state = initialState, action) => {
                 ...state,
                 userData: action.payload
             }
+        case 'USER_LOGOUT':
+            return {...state,
+                userData: {}
+            }
         default:
             return state
     }
