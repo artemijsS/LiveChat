@@ -1,4 +1,5 @@
 import {setUserLoading} from './loading';
+import {dialogsFetch} from './dialog';
 
 export const userDataFetch = (obj, path) => {
     return dispatch => {
@@ -13,7 +14,6 @@ export const userDataFetch = (obj, path) => {
             .then(resp => resp.json())
             .then(data => {
                 if (data.message) {
-                    dispatch(setUserLoading(false))
                     return data.message
                 } else {
                     localStorage.setItem("token", data.token)
@@ -25,7 +25,8 @@ export const userDataFetch = (obj, path) => {
                         token: data.token
                     }
                     dispatch(loginUser(user))
-                    dispatch(setUserLoading(false))
+                    dispatch(setUserLoading(true))
+                    dispatch(dialogsFetch(user.token))
                 }
             })
     }
@@ -59,7 +60,7 @@ export const getProfileFetch = () => {
                             token: token
                         }
                         dispatch(loginUser(user))
-                        dispatch(setUserLoading(false))
+                        dispatch(dialogsFetch(token))
                     }
                 })
         } else {
