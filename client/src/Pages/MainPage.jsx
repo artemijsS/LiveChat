@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { Helmet } from 'react-helmet';
-import {BackGround, Chat, Dialogs, Search} from "../Components";
+import {BackGround, Chat, Dialogs, FindNewDialog, Search} from "../Components";
 import logo from "../Components/images/logo.jpg"
 
 
@@ -22,16 +22,19 @@ function MainPage () {
                         <div className="side-bar">
                             { activeFindNewDialog
                                 ?
-                                    <div className="find-header">
-                                        <div className="box">
-                                            <div className="back">
-                                                <svg onClick={() => {setActiveFindNewDialog(false)}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 4l1.4 1.4L7.8 11H20v2H7.8l5.6 5.6L12 20l-8-8 8-8z"/></svg>
-                                            </div>
-                                            <div className="big-text">
-                                                Новый чат
+                                    <>
+                                        <div className="find-header">
+                                            <div className="box">
+                                                <div className="back">
+                                                    <svg onClick={() => {setActiveFindNewDialog(false)}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 4l1.4 1.4L7.8 11H20v2H7.8l5.6 5.6L12 20l-8-8 8-8z"/></svg>
+                                                </div>
+                                                <div className="big-text">
+                                                    New Chat
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <FindNewDialog/>
+                                    </>
                                 :
                                 <div>
                                     <div className="box-header">
