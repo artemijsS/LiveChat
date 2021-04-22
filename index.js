@@ -14,7 +14,8 @@ const PORT = conf.get('port') || 5000
 app.use('/api/auth', require('./routes/auth.routes'));
 // dialogs
 app.use('/api/dialog', require('./routes/dialog.routes'));
-
+// user
+app.use('/api/user', require('./routes/user.routes'));
 
 async function start() {
     try {
