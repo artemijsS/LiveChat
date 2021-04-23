@@ -1,10 +1,13 @@
 import React, {useState} from 'react';
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import logo from "./images/logo.jpg"
 import axios from "axios";
+import {createDialog} from "../redux/actions/dialog";
 
 
 const FindNewDialog = () => {
+
+    const dispatch = useDispatch();
 
     const {token} = useSelector(({user}) => user.userData)
 
@@ -13,9 +16,12 @@ const FindNewDialog = () => {
     const newDialogs = (search) => {
         if (search.length > 1)
             axios.post("http://localhost:5000/api/user/find", {telephone: search},{ headers: { Authorization: `Bearer ${token}` }}).then(res => {
-                console.log(res.data)
                 setDialogs(res.data)
             })
+    }
+
+    const createNewDialog = (userId) => {
+        dispatch(createDialog(token, userId))
     }
 
     return (
@@ -32,7 +38,7 @@ const FindNewDialog = () => {
                 {
                     dialogs.map((user, i) => {
                         return (
-                            <div className="dialog" key={user.id+i}>
+                            <div onClick={() => createNewDialog(user._id)} className="dialog" key={user._id+i}>
                                 <img src={logo} alt="error"/>
                                 <div className="details">
                                     <div className="dialog-info1">

@@ -23,10 +23,12 @@ router.get('/find', auth, async (req, res) => {
         const dialogs = await Dialog.find({'_id': { $in: dialogsAr }}).sort({last_message_time: -1})
 
         let answer = {}
+        let order = []
         for (const obj of dialogs) {
             const p1 = JSON.stringify(obj.participant1_id);
             const userId = JSON.stringify(user.id);
             const data = await User.findById(p1 === userId ? obj.participant2_id : obj.participant1_id)
+            order.push(obj.id)
             answer[obj.id] = ({
                 dialog: {
                     id: obj.id,
@@ -40,8 +42,7 @@ router.get('/find', auth, async (req, res) => {
                 name: data.name, photo: data.photo, id: data.id, status: data.status
             })
         }
-
-        res.json(answer);
+        res.json({answer, order});
     } catch (e) {
         res.status(500).json({ message: "Error" })
     }

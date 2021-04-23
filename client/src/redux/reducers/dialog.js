@@ -1,5 +1,7 @@
 const initialState = {
-    dialogs: {}
+    dialogs: {},
+    dialogsOrder: [],
+    activeDialog: ''
 }
 
 const dialog = (state = initialState, action) => {
@@ -8,6 +10,16 @@ const dialog = (state = initialState, action) => {
             return {
                 ...state,
                 dialogs: action.payload
+            }
+        case 'DIALOG_ACTIVE_SET':
+            return {
+                ...state,
+                activeDialog: action.payload
+            }
+        case 'DIALOG_ORDER_SET':
+            return {
+                ...state,
+                dialogsOrder: action.payload
             }
         default:
             return state

@@ -1,14 +1,20 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import {useSelector} from "react-redux";
 import { Helmet } from 'react-helmet';
 import {BackGround, Chat, Dialogs, FindNewDialog, Search} from "../Components";
-import logo from "../Components/images/logo.jpg"
+import logo from "../Components/images/logo.jpg";
 
 
 function MainPage () {
 
+    const {dialogs, activeDialog} = useSelector(({dialog}) => dialog)
+
     const [activeFindNewDialog, setActiveFindNewDialog] = useState(false)
     const [activeChat, setActiveChat] = useState(true)
 
+    useEffect(() => {
+        setActiveFindNewDialog(false);
+    }, [activeDialog])
 
     return (
         <div>
@@ -63,17 +69,17 @@ function MainPage () {
                                 </div>
                                 }
                         </div>
-                        { activeChat
+                        { activeDialog
                             ?
                                 <div className="chat-bar">
                                     <div className="box-header">
                                         <img src={logo} alt="error"/>
                                         <div className="dialog-info">
                                             <div className="dialog-name">
-                                                Artemij
+                                                {dialogs[activeDialog].name}
                                             </div>
                                             <div className="last-time-seen">
-                                                offline
+                                                {dialogs[activeDialog].status ? "online" : "offline"}
                                             </div>
                                         </div>
                                         <div className="settings">

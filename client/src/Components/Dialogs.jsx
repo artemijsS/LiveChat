@@ -1,23 +1,29 @@
 import React from 'react';
-import {useSelector} from "react-redux";
-
+import {useDispatch, useSelector} from "react-redux";
+import {activeDialogSet} from "../redux/actions/dialog";
 
 import logo from "./images/logo.jpg";
 
 const Dialogs = () => {
 
-    const {dialogs} = useSelector(({dialog}) => dialog)
+    const dispatch = useDispatch()
+
+    const {dialogs, activeDialog, dialogsOrder} = useSelector(({dialog}) => dialog)
     const {userData} = useSelector(({user}) => user)
+
+    const setActiveDialog = (id) => {
+        dispatch(activeDialogSet(id))
+    }
 
     return (
         <div className="dialogs">
             {dialogs !== {} &&
-                Object.keys(dialogs).map(key => {
+                dialogsOrder.map(key => {
 
                     const obj = dialogs[key]
 
                     return (
-                        <div className="dialog" key={key}>
+                        <div onClick={() => {setActiveDialog(key)}} className={activeDialog === key ? "dialog active" : "dialog"} key={key}>
                             <img src={logo} alt="error"/>
                             <div className="details">
                                 <div className="dialog-info1">
@@ -46,7 +52,7 @@ const Dialogs = () => {
                     )
                 })
             }
-            {Object.keys(dialogs).length === 0 &&
+            {dialogsOrder.length === 0 &&
                 <div>NO-CHATS</div>
             }
 
