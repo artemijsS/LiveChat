@@ -15,7 +15,7 @@ router.get('/find', auth, async (req, res) => {
         const user = await User.findById(userId)
 
         if (!user) {
-            res.status(401).json({message: "No Auth"})
+            return res.status(401).json({message: "No Auth"})
         }
 
         const dialogsAr = user.dialogs
@@ -55,6 +55,12 @@ router.post('/new', auth, async (req, res) => {
             const userId = req.user.userId
             const userId2 = req.body.userId
 
+            const isDialog = await Dialog.findOne({$or: [{participant1_id: userId, participant2_id: userId2}, {participant1_id: userId2, participant2_id: userId}]})
+
+            if (isDialog) {
+                return res.status(500).json({ message: "This dialog already exist" })
+            }
+
             const dialog = new Dialog({
                 participant1_id: userId,
                 participant2_id: userId2
@@ -64,10 +70,12 @@ router.post('/new', auth, async (req, res) => {
 
             const user1 = await User.findById(userId);
             user1.dialogs.push(dialog.id);
+            user1.friends.push(userId2);
             await user1.save();
 
             const user2 = await User.findById(userId2);
             user2.dialogs.push(dialog.id);
+            user2.friends.push(userId);
             await user2.save();
 
             res.json(dialog.id)

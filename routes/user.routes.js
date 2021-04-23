@@ -13,8 +13,10 @@ router.post('/find', auth, async (req, res) => {
         const user = await User.findById(id)
         const telephone = req.body.telephone
 
-        const docs = await User.find({ telephone: {$regex: telephone, $options: 'i'}},"name telephone")
-        //TODO написать проверку, есть ли этот юзер в уже в друзьях
+        const docs = await User.find({
+            telephone: {$regex: telephone, $options: 'i'},
+            $and: [ {_id: { $ne: id }}, {_id: { $not: { $in: user.friends }} }]},"name telephone")
+
         res.json(docs)
     } catch (e) {
         res.status(500).json({ message: "Error" })

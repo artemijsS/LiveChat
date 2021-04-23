@@ -9,7 +9,8 @@ const schema = new Schema({
     status: {type: Boolean},
     last_time_seen: {type: String},
     photo: {type: String},
-    dialogs: [{type: Types.ObjectId, ref: 'Dialog'}]
+    dialogs: [{type: Types.ObjectId, ref: 'Dialog'}],
+    friends: [{type: Types.ObjectId, ref: 'User'}]
 })
 
 module.exports = model('User', schema)
