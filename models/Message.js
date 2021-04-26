@@ -6,7 +6,7 @@ const schema = new Schema({
     recipient: {type: Types.ObjectId, ref: 'User', required: true},
     time: {type: String, required: true},
     status: {type: Boolean, required: true},
-    dialog: {type: Types.ObjectId, ref: 'Dialog', required: true}
+    dialogId: {type: Types.ObjectId, ref: 'Dialog', required: true}
 })
 
 module.exports = model('Message', schema)

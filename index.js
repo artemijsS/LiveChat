@@ -16,6 +16,8 @@ app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/dialog', require('./routes/dialog.routes'));
 // user
 app.use('/api/user', require('./routes/user.routes'));
+// message
+app.use('/api/message', require('./routes/message.routes'));
 
 async function start() {
     try {
