@@ -2,19 +2,42 @@ import React, {useState, useEffect} from 'react';
 import {useSelector} from "react-redux";
 import { Helmet } from 'react-helmet';
 import {BackGround, Chat, Dialogs, FindNewDialog, Search} from "../Components";
+import axios from "axios";
+import {useAlert} from "react-alert";
 import logo from "../Components/images/logo.jpg";
 
 
 function MainPage () {
 
     const {dialogs, activeDialog} = useSelector(({dialog}) => dialog)
+    const {token} = useSelector(({user}) => user.userData)
+
+    const alert = useAlert()
 
     const [activeFindNewDialog, setActiveFindNewDialog] = useState(false)
-    const [activeChat, setActiveChat] = useState(true)
+    const [messageText, setMessageText] = useState('')
+
 
     useEffect(() => {
         setActiveFindNewDialog(false);
     }, [activeDialog])
+
+    const sendMessage = (e) => {
+        e.preventDefault();
+        const input = document.querySelector('#sendMessageInput');
+        input.value = ""
+        console.log(messageText)
+
+        const message = {
+            recipient: dialogs[activeDialog].id,
+            text: messageText,
+            dialogId: activeDialog
+        }
+
+        axios.post("http://localhost:5000/api/message/new", message, { headers: { Authorization: `Bearer ${token}` }}).then(res => {}, err => {
+            alert.show('Error with sending message');
+        })
+    }
 
     return (
         <div>
@@ -90,10 +113,10 @@ function MainPage () {
                                     <Chat/>
                                     <div className="footer">
                                         <div className="box">
-                                            <div className="input-box">
-                                                <input type="text" placeholder="Введите сообщение"/>
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"/></svg>
-                                            </div>
+                                            <form onSubmit={sendMessage} className="input-box">
+                                                <input onChange={e => setMessageText(e.target.value)} id="sendMessageInput" type="text" placeholder="Введите сообщение"/>
+                                                <svg onClick={sendMessage} type="submit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"/></svg>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
