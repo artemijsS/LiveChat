@@ -14,16 +14,15 @@ export const dialogsFetch = (token) => {
 export const createDialog = (token, userId) => {
     return dispatch => {
         return axios.post("http://localhost:5000/api/dialog/new", {userId},{ headers: { Authorization:`Bearer ${token}`}}).then(res => {
-            dispatch(dialogsFetch(token))
-            dispatch(activeDialogSet(res.data))
+            dispatch(dialogsFetch(token)).then(() => {dispatch(activeDialogSet(res.data))})
         })
     }
 }
 
-export const dialogsOrderSet = (id) => {
+export const dialogsOrderSet = (arr) => {
     return {
         type: 'DIALOG_ORDER_SET',
-        payload: id
+        payload: arr
     }
 }
 
