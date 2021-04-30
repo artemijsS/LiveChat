@@ -1,5 +1,6 @@
 import {setUserLoading} from './loading';
 import {dialogsFetch} from './dialog';
+import socket from "../../socket";
 
 export const userDataFetch = (obj, path) => {
     return dispatch => {
@@ -26,6 +27,7 @@ export const userDataFetch = (obj, path) => {
                     }
                     dispatch(loginUser(user))
                     dispatch(setUserLoading(true))
+                    socket.emit('userOnline', user.userId)
                     dispatch(dialogsFetch(user.token))
                 }
             })
@@ -60,6 +62,7 @@ export const getProfileFetch = () => {
                             token: token
                         }
                         dispatch(loginUser(user))
+                        socket.emit('userOnline', user.userId)
                         dispatch(dialogsFetch(token))
                     }
                 })

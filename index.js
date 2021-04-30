@@ -5,6 +5,31 @@ const cors = require('cors')
 
 const app = express()
 
+//*******************
+//      SOCKETS
+//*******************
+
+const server = require('http').createServer(app);
+const io = require('socket.io')(server, {
+    cors: {
+        origin: '*',
+    }
+});
+
+const socketsPort = 8000;
+
+io.on('connection', (socket) => {
+    require('./sockets/main.socket')(socket, io)
+});
+
+server.listen(socketsPort, () => {
+    console.log('Sockets are on port ', socketsPort)
+})
+
+//*******************
+//   END SOCKETS
+//*******************
+
 app.use(cors());
 app.use(express.json({ extended: true }))
 
@@ -19,7 +44,7 @@ app.use('/api/user', require('./routes/user.routes'));
 // message
 app.use('/api/message', require('./routes/message.routes'));
 
-async function start() {
+async function startApp() {
     try {
         // mongoDB connection
         await mongoose.connect(conf.get('mongoUrl'), {
@@ -34,4 +59,4 @@ async function start() {
     }
 }
 
-start()
+startApp()
