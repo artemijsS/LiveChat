@@ -21,6 +21,17 @@ const dialog = (state = initialState, action) => {
                 ...state,
                 dialogsOrder: action.payload
             }
+        case 'DIALOG_USER_ONLINE_SET':
+            return {
+                ...state,
+                dialogs: {
+                    ...state.dialogs,
+                    [action.dialogId]: {
+                        ...state.dialogs[action.dialogId],
+                        status: action.payload
+                    }
+                }
+            }
         default:
             return state
     }

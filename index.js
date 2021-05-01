@@ -5,35 +5,10 @@ const cors = require('cors')
 
 const app = express()
 
-//*******************
-//      SOCKETS
-//*******************
-
-const server = require('http').createServer(app);
-const io = require('socket.io')(server, {
-    cors: {
-        origin: '*',
-    }
-});
-
-const socketsPort = 8000;
-
-io.on('connection', (socket) => {
-    require('./sockets/main.socket')(socket, io)
-});
-
-server.listen(socketsPort, () => {
-    console.log('Sockets are on port ', socketsPort)
-})
-
-//*******************
-//   END SOCKETS
-//*******************
-
 app.use(cors());
 app.use(express.json({ extended: true }))
 
-const PORT = conf.get('port') || 5000
+const PORT = process.env.PORT || 5000;
 
 // registration, login
 app.use('/api/auth', require('./routes/auth.routes'));
@@ -53,7 +28,27 @@ async function startApp() {
             useCreateIndex: true
         });
 
-        app.listen(PORT, () => console.log(`App has been started on port ${PORT}...`))
+        const server = app.listen(PORT, () => console.log(`App has been started on port ${PORT}...`))
+
+        //*******************
+        //      SOCKETS
+        //*******************
+
+        const socketIO = require('socket.io');
+        const io = socketIO(server, {
+            cors: {
+                origin: '*',
+            }
+        });
+
+        io.on('connection', (socket) => {
+            require('./sockets/onlineStatus.socket')(socket, io)
+        });
+
+        //*******************
+        //   END SOCKETS
+        //*******************
+
     } catch (e) {
         console.log(e)
     }

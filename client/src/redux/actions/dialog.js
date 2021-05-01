@@ -39,3 +39,11 @@ export const dialogsSet = (obj) => {
         payload: obj
     }
 }
+
+export const dialogUserOnlineStatusSet = (id, status) => {
+    return {
+        type: 'DIALOG_USER_ONLINE_SET',
+        payload: status,
+        dialogId: id
+    }
+}
