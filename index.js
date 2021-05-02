@@ -19,6 +19,19 @@ app.use('/api/user', require('./routes/user.routes'));
 // message
 app.use('/api/message', require('./routes/message.routes'));
 
+//**************************
+//  REACT APP
+//**************************
+
+const path = require('path');
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
+});
+
+//**************************
+
 async function startApp() {
     try {
         // mongoDB connection
