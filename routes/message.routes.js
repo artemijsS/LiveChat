@@ -57,7 +57,7 @@ router.post('/new', auth, async (req, res) => {
 
         await dialog.save()
 
-        res.status(200).json("ok")
+        res.status(200).json(message)
 
     } catch (e) {
         res.status(500).json({ message: "Error" })

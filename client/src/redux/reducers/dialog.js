@@ -60,19 +60,6 @@ const dialog = (state = initialState, action) => {
                 ...state,
                 dialogsOrder: orderArr
             }
-        case 'DIALOG_NEW_SET':
-
-            let orderActual = state.dialogsOrder
-            orderActual.unshift(action.dialogId)
-
-            return {
-                ...state,
-                dialogs: {
-                    ...state.dialogs,
-                    [action.dialogId]: action.payload
-                },
-                dialogsOrder: orderActual
-            }
         default:
             return state
     }
