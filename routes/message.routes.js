@@ -87,25 +87,4 @@ router.get('/find/:id', auth, async (req, res) => {
 
 })
 
-// api/message/find/:id
-router.get('/find/:id', auth, async (req, res) => {
-
-    try {
-        const dialogId = req.params.id
-        const userId = req.user.userId
-
-        const user = await User.findById(userId)
-        if (user.dialogs.indexOf(dialogId) === -1) {
-            return res.status(401).json({ message: "You don't have permission" })
-        }
-
-        const docs = await Message.find({ "dialogId": dialogId }).sort({time: -1})
-        res.json(docs)
-
-    } catch (e) {
-        res.status(500).json({ message: "Error" })
-    }
-
-})
-
 module.exports = router;

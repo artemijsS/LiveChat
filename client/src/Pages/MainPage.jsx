@@ -1,13 +1,17 @@
 import React, {useState, useEffect} from 'react';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { Helmet } from 'react-helmet';
 import {BackGround, Chat, Dialogs, FindNewDialog, Search} from "../Components";
 import axios from "axios";
 import {useAlert} from "react-alert";
+import socket from "../socket";
 import logo from "../Components/images/logo.jpg";
+import {messageNewDelete} from "../redux/actions/message";
 
 
 function MainPage () {
+
+    const dispatch = useDispatch()
 
     const {dialogs, activeDialog} = useSelector(({dialog}) => dialog)
     const {token} = useSelector(({user}) => user.userData)
@@ -20,13 +24,13 @@ function MainPage () {
 
     useEffect(() => {
         setActiveFindNewDialog(false);
+        dispatch(messageNewDelete())
     }, [activeDialog])
 
     const sendMessage = (e) => {
         e.preventDefault();
         const input = document.querySelector('#sendMessageInput');
         input.value = ""
-        console.log(messageText)
 
         const message = {
             recipient: dialogs[activeDialog].id,
@@ -34,7 +38,9 @@ function MainPage () {
             dialogId: activeDialog
         }
 
-        axios.post("http://localhost:5000/api/message/new", message, { headers: { Authorization: `Bearer ${token}` }}).then(res => {}, err => {
+        axios.post("http://localhost:5000/api/message/new", message, { headers: { Authorization: `Bearer ${token}` }}).then(message => {
+            socket.emit('newMessage', message.data)
+        }, err => {
             alert.show('Error with sending message');
         })
     }

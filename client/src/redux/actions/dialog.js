@@ -47,3 +47,18 @@ export const dialogUserOnlineStatusSet = (id, status) => {
         dialogId: id
     }
 }
+
+export const dialogLastMessageSet = (id, message) => {
+    return {
+        type: 'DIALOG_LAST_MESSAGE_SET',
+        payload: message,
+        dialogId: id
+    }
+}
+
+export const dialogOrderChange = (id) => {
+    return {
+        type: 'DIALOG_ORDER_CHANGE',
+        payload: id
+    }
+}
