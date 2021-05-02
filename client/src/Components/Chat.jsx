@@ -11,7 +11,7 @@ const Chat = () => {
     const [messages, setMessages] = useState([])
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/message/find/${activeDialog}`, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
+        axios.get(`/api/message/find/${activeDialog}`, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
             setMessages(res.data)
         }, err => {
             console.log(err)

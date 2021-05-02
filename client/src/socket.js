@@ -3,7 +3,7 @@ import store from "./redux/store"
 import {dialogLastMessageSet, dialogOrderChange, dialogUserOnlineStatusSet} from "./redux/actions/dialog"
 import { messagesNewSet } from "./redux/actions/message";
 
-const socket = io("http://localhost:5000")
+const socket = io()
 
 socket.on('userOnline', (data) => {
     store.dispatch(dialogUserOnlineStatusSet(data.dialogId, data.status))

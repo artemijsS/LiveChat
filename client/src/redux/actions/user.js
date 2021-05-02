@@ -4,7 +4,7 @@ import socket from "../../socket";
 
 export const userDataFetch = (obj, path) => {
     return dispatch => {
-        return fetch(`http://localhost:5000/api/auth/${path}`, {
+        return fetch(`/api/auth/${path}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export const getProfileFetch = () => {
         const token = localStorage.token;
         dispatch(setUserLoading(true));
         if (token) {
-            return fetch("http://localhost:5000/api/auth/check", {
+            return fetch("/api/auth/check", {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',

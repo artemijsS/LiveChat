@@ -38,7 +38,7 @@ function MainPage () {
             dialogId: activeDialog
         }
 
-        axios.post("http://localhost:5000/api/message/new", message, { headers: { Authorization: `Bearer ${token}` }}).then(message => {
+        axios.post("/api/message/new", message, { headers: { Authorization: `Bearer ${token}` }}).then(message => {
             socket.emit('newMessage', message.data)
         }, err => {
             alert.show('Error with sending message');

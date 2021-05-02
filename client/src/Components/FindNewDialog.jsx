@@ -15,7 +15,7 @@ const FindNewDialog = () => {
 
     const newDialogs = (search) => {
         if (search.length > 1)
-            axios.post("http://localhost:5000/api/user/find", {telephone: search},{ headers: { Authorization: `Bearer ${token}` }}).then(res => {
+            axios.post("/api/user/find", {telephone: search},{ headers: { Authorization: `Bearer ${token}` }}).then(res => {
                 setDialogs(res.data)
             })
     }
