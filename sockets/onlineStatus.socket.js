@@ -38,7 +38,8 @@ module.exports = (socket,io) => {
                     }
                     if (online.dialogs[dialogId]) {
                         online.dialogs[dialogId].map(socketId => {
-                            io.to(socketId).emit('userOnline', {dialogId, status: status})
+                            if (online.users[socketId] !== socket.userId)
+                                io.to(socketId).emit('userOnline', {dialogId, status: status})
                         })
                     }
                     if (!del)
