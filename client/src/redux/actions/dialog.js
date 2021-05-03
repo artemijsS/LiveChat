@@ -66,8 +66,6 @@ export const dialogOrderChange = (id) => {
 }
 
 export const dialogNewSet = (dialogId, obj) => {
-    console.log(dialogId)
-    console.log(obj)
     return {
         type: 'DIALOG_NEW_SET',
         payload: obj,

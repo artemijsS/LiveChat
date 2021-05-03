@@ -9,8 +9,7 @@ module.exports = (socket,io) => {
             const p1 = JSON.stringify(dialog.participant1_id);
             const userId = JSON.stringify(socket.userId)
             const userId2 = p1 === userId ? dialog.participant2_id : dialog.participant1_id
-            console.log(userId2)
-            findUser(userId2).then((user) => {
+            findUser(socket.userId).then((user) => {
                 const newDialog = {
                     dialog: {
                         id: dialog.id,
@@ -23,7 +22,7 @@ module.exports = (socket,io) => {
                     },
                     name: user.name, photo: user.photo, id: user.id, status: user.status
                 }
-                online.dialogs[dialogId] = online.usersById[socket.userId].concat(online.usersById[user.id])
+                online.dialogs[dialogId] = online.usersById[socket.userId].concat(online.usersById[userId2])
                 online.dialogs[dialogId].map((socketId) => {
                     if (online.users[socketId] !== socket.userId)
                         io.to(socketId).emit('newDialog', { dialogId, newDialog })
