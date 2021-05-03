@@ -55,8 +55,10 @@ module.exports = (socket,io) => {
             })
         }
 
-        if (online.usersById[socket.userId])
+        if (online.usersById[socket.userId] && online.usersById[socket.userId].length > 1)
             online.usersById[socket.userId].splice(online.usersById[socket.userId].indexOf(socket.id), 1)
+        else
+            delete online.usersById[socket.userId]
 
         delete online.users[socket.id]
         console.log(online.users)
