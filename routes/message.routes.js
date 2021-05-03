@@ -51,6 +51,7 @@ router.post('/new', auth, async (req, res) => {
 
         dialog.last_message = text
         dialog.last_message_time = time
+        dialog.last_message_created_at = message.created_at
         dialog.last_message_owner = owner
         dialog.last_message_status = false
         dialog.messages.push(message.id)
@@ -77,7 +78,7 @@ router.get('/find/:id', auth, async (req, res) => {
             return res.status(401).json({ message: "You don't have permission" })
         }
 
-        const docs = await Message.find({ "dialogId": dialogId }).sort({time: -1})
+        const docs = await Message.find({ "dialogId": dialogId }).sort({created_at: -1})
         res.json(docs)
 
     } catch (e) {
