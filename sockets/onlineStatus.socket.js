@@ -14,19 +14,27 @@ module.exports = (socket,io) => {
 
         console.log(online.usersById)
 
-        changeStatus(userId, true).then((user) => {
-            user.dialogs.map((dialogId) => {
-                if (online.dialogs[dialogId]) {
-                    online.dialogs[dialogId].map(socketId => {
-                        if (online.users[socketId] !== socket.userId)
-                            io.to(socketId).emit('userOnline', {dialogId, status: true})
-                    })
-                    online.dialogs[dialogId].push(socket.id)
-                } else {
-                    online.dialogs[dialogId] = [socket.id]
-                }
+        if (online.usersById[socket.userId] && online.usersById[socket.userId].length === 1) {
+            changeStatus(userId, true).then((user) => {
+                user.dialogs.map((dialogId) => {
+                    if (online.dialogs[dialogId]) {
+                        online.dialogs[dialogId].map(socketId => {
+                            if (online.users[socketId] !== socket.userId)
+                                io.to(socketId).emit('userOnline', {dialogId, status: true})
+                        })
+                        online.dialogs[dialogId].push(socket.id)
+                    } else {
+                        online.dialogs[dialogId] = [socket.id]
+                    }
+                })
             })
-        })
+        } else {
+            findUser(socket.userId).then((user) => {
+                user.dialogs.map((dialogId) => {
+                        online.dialogs[dialogId].push(socket.id)
+                })
+            })
+        }
     })
 
     socket.on('disconnect', () => {
@@ -35,13 +43,15 @@ module.exports = (socket,io) => {
             changeStatus(socket.userId, false).then(deleteOnlineDialog)
         } else {
             findUser(socket.userId).then((user) => {
-                user.dialogs.map((dialogId) => {
-                    if (online.dialogs[dialogId].length > 1) {
-                        online.dialogs[dialogId].splice(online.dialogs[dialogId].indexOf(socket.id), 1)
-                    } else {
-                        delete online.dialogs[dialogId]
-                    }
-                })
+                if (user) {
+                    user.dialogs.map((dialogId) => {
+                        if (online.dialogs[dialogId].length > 1) {
+                            online.dialogs[dialogId].splice(online.dialogs[dialogId].indexOf(socket.id), 1)
+                        } else {
+                            delete online.dialogs[dialogId]
+                        }
+                    })
+                }
             })
         }
 

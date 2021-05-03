@@ -57,6 +57,7 @@ async function startApp() {
         io.on('connection', (socket) => {
             require('./sockets/onlineStatus.socket')(socket, io)
             require('./sockets/messages.socket')(socket, io)
+            require('./sockets/dialogs.socket')(socket, io)
         });
 
         //*******************

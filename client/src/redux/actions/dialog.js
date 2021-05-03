@@ -1,5 +1,6 @@
 import axios from "axios";
 import {setUserLoading} from "./loading";
+import socket from "../../socket";
 
 export const dialogsFetch = (token) => {
     return dispatch => {
@@ -15,6 +16,7 @@ export const createDialog = (token, userId) => {
     return dispatch => {
         return axios.post("/api/dialog/new", {userId},{ headers: { Authorization:`Bearer ${token}`}}).then(res => {
             dispatch(dialogsFetch(token)).then(() => {dispatch(activeDialogSet(res.data))})
+            socket.emit('newDialog', res.data)
         })
     }
 }
@@ -60,5 +62,15 @@ export const dialogOrderChange = (id) => {
     return {
         type: 'DIALOG_ORDER_CHANGE',
         payload: id
+    }
+}
+
+export const dialogNewSet = (dialogId, obj) => {
+    console.log(dialogId)
+    console.log(obj)
+    return {
+        type: 'DIALOG_NEW_SET',
+        payload: obj,
+        dialogId: dialogId
     }
 }
