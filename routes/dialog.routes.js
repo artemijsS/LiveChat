@@ -20,7 +20,7 @@ router.get('/find', auth, async (req, res) => {
 
         const dialogsAr = user.dialogs
 
-        const dialogs = await Dialog.find({'_id': { $in: dialogsAr }}).sort({last_message_time: -1})
+        const dialogs = await Dialog.find({'_id': { $in: dialogsAr }}).sort({last_message_created_at: -1})
 
         let answer = {}
         let order = []

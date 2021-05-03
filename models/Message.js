@@ -7,6 +7,6 @@ const schema = new Schema({
     time: {type: String, required: true},
     status: {type: Boolean, required: true},
     dialogId: {type: Types.ObjectId, ref: 'Dialog', required: true}
-})
+}, { timestamps: { createdAt: 'created_at' } })
 
 module.exports = model('Message', schema)
