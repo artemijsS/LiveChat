@@ -1,19 +1,32 @@
 import { io } from "socket.io-client"
 import store from "./redux/store"
-import {dialogLastMessageSet, dialogOrderChange, dialogUserOnlineStatusSet} from "./redux/actions/dialog"
+import {dialogLastMessageSet, dialogOrderChange, dialogUserOnlineStatusSet, dialogNewSet, dialogLastMessageStatusSet} from "./redux/actions/dialog"
 import { messagesNewSet } from "./redux/actions/message";
 
-const socket = io("http://localhost:5000")
+const socket = io()
 
 socket.on('userOnline', (data) => {
     store.dispatch(dialogUserOnlineStatusSet(data.dialogId, data.status))
 })
 
 socket.on('newMessage', (message) => {
-    if (store.getState().dialog.activeDialog === message.dialogId)
+    if (store.getState().dialog.activeDialog === message.dialogId) {
         store.dispatch(messagesNewSet(message))
+        socket.emit('messageAllStatus', {dialogId: message.dialogId, id: store.getState().user.userData.userId})
+    }
+
     store.dispatch(dialogLastMessageSet(message.dialogId, message))
-    store.dispatch(dialogOrderChange(message.dialogId))
+
+    if (store.getState().dialog.dialogsOrder[0] !== message.dialogId)
+        store.dispatch(dialogOrderChange(message.dialogId))
+})
+
+socket.on('newDialog', (dialog) => {
+    store.dispatch(dialogNewSet(dialog.dialogId, dialog.newDialog))
+})
+
+socket.on('messageAllStatus', (messages) => {
+    store.dispatch(dialogLastMessageStatusSet(messages.dialogId))
 })
 
 export default socket;

@@ -14,7 +14,7 @@ function MainPage () {
     const dispatch = useDispatch()
 
     const {dialogs, activeDialog} = useSelector(({dialog}) => dialog)
-    const {token} = useSelector(({user}) => user.userData)
+    const {token, userId} = useSelector(({user}) => user.userData)
 
     const alert = useAlert()
 
@@ -23,13 +23,15 @@ function MainPage () {
 
 
     useEffect(() => {
-        setActiveFindNewDialog(false);
+        setActiveFindNewDialog(false)
         dispatch(messageNewDelete())
+        if (activeDialog)
+            socket.emit('messageAllStatus', {dialogId: activeDialog, id: userId})
     }, [activeDialog])
 
     const sendMessage = (e) => {
-        e.preventDefault();
-        const input = document.querySelector('#sendMessageInput');
+        e.preventDefault()
+        const input = document.querySelector('#sendMessageInput')
         input.value = ""
 
         const message = {
@@ -41,7 +43,7 @@ function MainPage () {
         axios.post("http://localhost:5000/api/message/new", message, { headers: { Authorization: `Bearer ${token}` }}).then(message => {
             socket.emit('newMessage', message.data)
         }, err => {
-            alert.show('Error with sending message');
+            alert.show('Error with sending message')
         })
     }
 

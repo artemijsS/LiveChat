@@ -1,9 +1,10 @@
 import axios from "axios";
 import {setUserLoading} from "./loading";
+import socket from "../../socket";
 
 export const dialogsFetch = (token) => {
     return dispatch => {
-        return axios.get("http://localhost:5000/api/dialog/find", { headers: { Authorization:`Bearer ${token}`}}).then(res => {
+        return axios.get("/api/dialog/find", { headers: { Authorization:`Bearer ${token}`}}).then(res => {
             dispatch(dialogsSet(res.data.answer))
             dispatch(dialogsOrderSet(res.data.order))
             dispatch(setUserLoading(false))
@@ -13,8 +14,9 @@ export const dialogsFetch = (token) => {
 
 export const createDialog = (token, userId) => {
     return dispatch => {
-        return axios.post("http://localhost:5000/api/dialog/new", {userId},{ headers: { Authorization:`Bearer ${token}`}}).then(res => {
+        return axios.post("/api/dialog/new", {userId},{ headers: { Authorization:`Bearer ${token}`}}).then(res => {
             dispatch(dialogsFetch(token)).then(() => {dispatch(activeDialogSet(res.data))})
+            socket.emit('newDialog', res.data)
         })
     }
 }
@@ -60,5 +62,21 @@ export const dialogOrderChange = (id) => {
     return {
         type: 'DIALOG_ORDER_CHANGE',
         payload: id
+    }
+}
+
+export const dialogNewSet = (dialogId, obj) => {
+    return {
+        type: 'DIALOG_NEW_SET',
+        payload: obj,
+        dialogId: dialogId
+    }
+}
+
+export const dialogLastMessageStatusSet = (dialogId) => {
+    return {
+        type: 'DIALOG_LAST_MESSAGE_STATUS_SET',
+        payload: true,
+        dialogId: dialogId
     }
 }
