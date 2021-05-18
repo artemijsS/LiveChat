@@ -57,7 +57,10 @@ const Dialogs = () => {
                 })
             }
             {dialogsOrder.length === 0 &&
-                <div>NO-CHATS</div>
+                <div className="no_chat">
+                    <p>You don't have any active chats yet.</p>
+                    <p>Use search to find friends!</p>
+                </div>
             }
 
         </div>

@@ -506,6 +506,14 @@ button:hover {
   right: 10px;
 }
 
+/*NO-CHAT*/
+
+.no_chat {
+  margin-top: 70%;
+  text-align: center;
+  color: grey;
+}
+
 
 /*FOTTER*/
 

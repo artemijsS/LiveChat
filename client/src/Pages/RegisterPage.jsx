@@ -64,9 +64,14 @@ function RegisterPage () {
                             <label htmlFor="email">E-mail</label>
                         </div>
                         <div className="text_field">
-                            <input type="password" id="pass" name="password" minLength="6" required onChange={changeHandler}/>
+                            <input type="password" id="password" name="password" minLength="6" required onChange={changeHandler}/>
                             <span/>
                             <label htmlFor="pass">Password</label>
+                        </div>
+                        <div className="text_field">
+                            <input type="password" id="confirm_password" name="password" minLength="6" required onChange={changeHandler}/>
+                            <span/>
+                            <label htmlFor="pass">Confirm Password</label>
                         </div>
                         <button type="submit">REGISTER</button>
                         <Link to="/login">Already registered? Log in!</Link>
