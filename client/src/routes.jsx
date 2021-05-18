@@ -1,7 +1,7 @@
 import React from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom'
 
-import {MainPage, AuthPage, RegisterPage, LoadingPage} from "./Pages";
+import {MainPage, AuthPage, RegisterPage, LoadingPage} from  "./Pages";
 
 import {useSelector} from "react-redux";
 
