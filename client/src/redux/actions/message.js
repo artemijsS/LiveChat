@@ -22,3 +22,10 @@ export const messagesStatusSet = () => {
         type: 'MESSAGES_STATUS_SET'
     }
 }
+
+export const messagesNewIdSet = (id) => {
+    return {
+        type: 'MESSAGES_NEW_ID_SET',
+        payload: id
+    }
+}

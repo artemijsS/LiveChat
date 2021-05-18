@@ -6,7 +6,7 @@ import axios from "axios";
 import {useAlert} from "react-alert";
 import socket from "../socket";
 import logo from "../Components/images/logo.jpg";
-import {messageNewDelete} from "../redux/actions/message";
+import {messageNewDelete, messagesNewSet} from "../redux/actions/message";
 
 
 function MainPage () {
@@ -45,6 +45,20 @@ function MainPage () {
         }, err => {
             alert.show('Error with sending message')
         })
+
+        const date = getDate();
+
+        const msg = {
+            _id: "none",
+            text: messageText,
+            owner: userId,
+            recipient: dialogs[activeDialog].id,
+            time: date,
+            status: false,
+            dialogId: activeDialog
+        }
+
+        dispatch(messagesNewSet(msg))
     }
 
     return (
@@ -140,3 +154,26 @@ function MainPage () {
 }
 
 export default MainPage;
+
+const getDate = () => {
+    const date_obj = new Date();
+
+    let day = date_obj.getDate();
+    if (day < 10) day = '0' + day;
+
+    let month = date_obj.getMonth() + 1;
+    if (month < 10) month = '0' + month;
+
+    let year = date_obj.getFullYear();
+
+    let hours = date_obj.getHours();
+    if (hours < 10) hours = '0' + hours;
+
+    let minutes = date_obj.getMinutes();
+    if (minutes < 10) minutes = '0' + minutes;
+
+    let seconds = date_obj.getSeconds();
+    if (seconds < 10) seconds = '0' + seconds;
+
+    return  `${day}/${month}/${year} ${hours}:${minutes} ${seconds}`;
+}

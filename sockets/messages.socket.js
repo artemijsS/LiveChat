@@ -6,8 +6,10 @@ module.exports = (socket,io) => {
 
     socket.on('newMessage', (message) => {
         online.dialogs[message.dialogId].map(socketId => {
-            io.to(socketId).emit('newMessage', message)
+            if (socketId !== socket.id)
+                io.to(socketId).emit('newMessage', message)
         })
+        socket.emit('newMessageId', message._id)
     })
 
     socket.on('messageAllStatus', (obj) => {

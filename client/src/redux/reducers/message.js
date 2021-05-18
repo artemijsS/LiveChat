@@ -39,6 +39,21 @@ const message = (state = initialState, action) => {
                 ...state,
                 status: !state.status
             }
+        case 'MESSAGES_NEW_ID_SET':
+
+            let ms = state.newMessages
+
+            for (let i = 0; i < ms.length; i++) {
+                if (ms[i]._id === 'none') {
+                    ms[i]._id = action.payload
+                    i = ms.length
+                }
+            }
+
+            return {
+                ...state,
+                newMessages: ms
+            }
         default:
             return state
     }
