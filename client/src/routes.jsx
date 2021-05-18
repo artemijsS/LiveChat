@@ -4,6 +4,7 @@ import {Switch, Route, Redirect} from 'react-router-dom'
 import {MainPage, AuthPage, RegisterPage} from "./Pages";
 
 import {useSelector} from "react-redux";
+import LoadingPage from "./Pages/LoadingPage";
 
 
 export const useRoutes = () => {
@@ -15,7 +16,7 @@ export const useRoutes = () => {
         return (
             <Switch>
                 <Route path="/" exact>
-                    <div>LOADING PAGE</div>
+                    <LoadingPage/>
                 </Route>
                 <Redirect to="/"/>
             </Switch>
