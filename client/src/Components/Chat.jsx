@@ -9,12 +9,16 @@ const Chat = () => {
     const {newMessages, status} = useSelector(({message}) => message)
 
     const [messages, setMessages] = useState([])
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        setLoading(true)
         axios.get(`/api/message/find/${activeDialog}`, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
             setMessages(res.data)
+            setLoading(false)
         }, err => {
             console.log(err)
+            setLoading(false)
         })
     }, [activeDialog, token])
 
@@ -60,7 +64,7 @@ const Chat = () => {
                 })
             }
             {
-                messages.map((obj, i) => {
+                !loading && messages.map((obj, i) => {
                     return (
                         <div className={`message-block ${userId === obj.owner ? "message-out" : "message-in"}`} key={i+obj._id}>
                             <div className="message">
@@ -81,6 +85,12 @@ const Chat = () => {
                         </div>
                     )
                 })
+            }
+            {
+                loading &&
+                    <div className="loadingChatBlock">
+                        <div className="spinner spinner-1"/>
+                    </div>
             }
         </div>
     )

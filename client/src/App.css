@@ -584,3 +584,84 @@ button:hover {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+
+
+/* LOADING CHAT CIRCLE */
+
+.loadingChatBlock {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 50px;
+}
+
+.spinner {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.spinner:before, .spinner:after {
+  content: "";
+  display: block;
+  position: absolute;
+  border-width: 4px;
+  border-style: solid;
+  border-radius: 50%;
+}
+
+@-webkit-keyframes rotate-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotate-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes anti-rotate-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes anti-rotate-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+.spinner.spinner-1:before {
+  width: 74px;
+  height: 74px;
+  border-bottom-color: #2f9688;
+  border-right-color: #2f9688;
+  border-top-color: rgba(33, 33, 33, 0);
+  border-left-color: rgba(33, 33, 33, 0);
+  top: 0;
+  left: 0;
+  -webkit-animation: rotate-animation 1s linear 0s infinite;
+  animation: rotate-animation 1s linear 0s infinite;
+}
+.spinner.spinner-1:after {
+  width: 53px;
+  height: 53px;
+  border-bottom-color: #2f9688;
+  border-right-color: #2f9688;
+  border-top-color: rgba(33, 33, 33, 0);
+  border-left-color: rgba(33, 33, 33, 0);
+  top: 10px;
+  left: 10px;
+  -webkit-animation: anti-rotate-animation 0.85s linear 0s infinite;
+  animation: anti-rotate-animation 0.85s linear 0s infinite;
+}
