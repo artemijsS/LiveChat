@@ -7,13 +7,14 @@ import {useAlert} from "react-alert";
 import socket from "../socket";
 import logo from "../Components/images/logo.jpg";
 import {messageNewDelete, messagesNewSet} from "../redux/actions/message";
+import {dialogLastMessageSet, dialogOrderChange} from "../redux/actions/dialog";
 
 
 function MainPage () {
 
     const dispatch = useDispatch()
 
-    const {dialogs, activeDialog} = useSelector(({dialog}) => dialog)
+    const {dialogs, activeDialog, dialogsOrder} = useSelector(({dialog}) => dialog)
     const {token, userId} = useSelector(({user}) => user.userData)
 
     const alert = useAlert()
@@ -40,6 +41,11 @@ function MainPage () {
             dialogId: activeDialog
         }
 
+        if (!messageText) {
+            alert.show('Enter the message text')
+            return false
+        }
+
         axios.post("/api/message/new", message, { headers: { Authorization: `Bearer ${token}` }}).then(message => {
             socket.emit('newMessage', message.data)
         }, err => {
@@ -59,6 +65,12 @@ function MainPage () {
         }
 
         dispatch(messagesNewSet(msg))
+        dispatch(dialogLastMessageSet(activeDialog, msg))
+
+        if (dialogsOrder[0] !== activeDialog)
+            dispatch(dialogOrderChange(activeDialog))
+
+        setMessageText('')
     }
 
     return (
