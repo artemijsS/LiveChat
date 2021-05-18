@@ -11,6 +11,7 @@
 /* color chat wallpapers: rgb(228,221,213) */
 /* color no chat wallpapers: rgb(248,249,250) */
 /* color message out: #dcf8c6 */
+/* color notification: #45d74c */
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap');
 
@@ -294,6 +295,7 @@ button:hover {
 }
 
 /*DIALOGS*/
+
 .dialogs {
   /*display: flex;*/
   /*flex-wrap: nowrap;*/
@@ -362,7 +364,9 @@ button:hover {
   color: rgb(145,145,145);
   margin-top: 4px;
 }
-
+.dialog-info1 .mssg-time.black {
+  color: black;
+}
 .last-message {
   font-size: 14px;
   color: rgb(145,145,145);
@@ -379,6 +383,19 @@ button:hover {
 }
 .last-message.big-text.noPadding {
   padding: 0;
+}
+
+.notification {
+  width: 22px;
+  height: 22px;
+  text-align: center;
+  color: white;
+}
+.notification span {
+  border-radius: 50%;
+  border: 1px;
+  padding: 1px 10px;
+  background-color: #45d74c;
 }
 
 
@@ -556,6 +573,14 @@ button:hover {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.black {
+  color: black;
 }
 
 /*DISPLAY NONE*/

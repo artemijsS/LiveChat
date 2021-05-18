@@ -7,7 +7,7 @@ import {useAlert} from "react-alert";
 import socket from "../socket";
 import logo from "../Components/images/logo.jpg";
 import {messageNewDelete, messagesNewSet} from "../redux/actions/message";
-import {dialogLastMessageSet, dialogOrderChange} from "../redux/actions/dialog";
+import {dialogLastMessageSet, dialogLastMessageStatusSet, dialogOrderChange} from "../redux/actions/dialog";
 
 
 function MainPage () {
@@ -26,8 +26,11 @@ function MainPage () {
     useEffect(() => {
         setActiveFindNewDialog(false)
         dispatch(messageNewDelete())
-        if (activeDialog)
+        if (activeDialog) {
             socket.emit('messageAllStatus', {dialogId: activeDialog, id: userId})
+            if (dialogs[activeDialog].dialog.last_message_owner !== userId)
+                dispatch(dialogLastMessageStatusSet(activeDialog))
+        }
     }, [activeDialog])
 
     const sendMessage = (e) => {

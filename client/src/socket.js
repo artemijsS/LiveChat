@@ -17,6 +17,10 @@ socket.on('newMessage', (message) => {
 
     store.dispatch(dialogLastMessageSet(message.dialogId, message))
 
+    if (store.getState().dialog.activeDialog === message.dialogId) {
+        store.dispatch(dialogLastMessageStatusSet(message.dialogId))
+    }
+
     if (store.getState().dialog.dialogsOrder[0] !== message.dialogId)
         store.dispatch(dialogOrderChange(message.dialogId))
 })

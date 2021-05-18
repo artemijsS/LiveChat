@@ -24,7 +24,7 @@ module.exports = (socket,io) => {
     const findMessages = async (dialogId, id) => {
         await Message.updateMany({ dialogId: dialogId, recipient: id, status: false }, { status: true })
         const dialog = await Dialog.findById(dialogId)
-        if (dialog.last_message_owner !== id) {
+        if (JSON.stringify(dialog.last_message_owner) !== JSON.stringify(id)) {
             dialog.last_message_status = true
             await dialog.save()
         }
