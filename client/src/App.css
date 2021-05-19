@@ -233,7 +233,7 @@ button:hover {
 
 .settingsPopUp {
   position: absolute;
-  top: 40px;
+  top: 44px;
   right: 13px;
   width: 193px;
   height: 200px;
@@ -258,6 +258,7 @@ button:hover {
 }
 .settingsLink div {
   padding-top: 11px;
+  width: 70%;
 }
 
 .chat-bar .box-header {

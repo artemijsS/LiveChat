@@ -1,3 +1,5 @@
+import socket from "../../socket";
+
 const initialState = {
     userData: {},
     loading: false
@@ -11,7 +13,9 @@ const user = (state = initialState, action) => {
                 userData: action.payload
             }
         case 'USER_LOGOUT':
-            return {...state,
+            socket.emit('logout')
+            return {
+                ...state,
                 userData: {}
             }
         default:

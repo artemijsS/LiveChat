@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import { Helmet } from 'react-helmet';
 import {BackGround, Chat, Dialogs, FindNewDialog, Search} from "../Components";
@@ -9,6 +9,7 @@ import logo from "../Components/images/logo.jpg";
 import {messageNewDelete, messagesNewSet} from "../redux/actions/message";
 import {dialogLastMessageSet, dialogLastMessageStatusSet, dialogOrderChange} from "../redux/actions/dialog";
 import {Link} from 'react-router-dom'
+import {logoutUser} from "../redux/actions/user";
 
 
 function MainPage () {
@@ -24,6 +25,8 @@ function MainPage () {
     const [messageText, setMessageText] = useState('')
     const [settingsPopUp, setSettingsPopUp] = useState(false)
 
+    const popUpRef = useRef();
+    const settingMenuRef = useRef();
 
     useEffect(() => {
         setActiveFindNewDialog(false)
@@ -34,6 +37,20 @@ function MainPage () {
                 dispatch(dialogLastMessageStatusSet(activeDialog))
         }
     }, [activeDialog])
+
+    const handleOutsideClick = (e) => {
+        if (!e.composedPath().includes(popUpRef.current) && !e.composedPath().includes(settingMenuRef.current)) {
+            setSettingsPopUp(false);
+        }
+    }
+
+    useEffect(() => {
+        document.body.addEventListener('click', handleOutsideClick)
+
+        return () => {
+            document.body.removeEventListener('click', handleOutsideClick);
+        };
+    }, [])
 
     const sendMessage = (e) => {
         e.preventDefault()
@@ -119,18 +136,18 @@ function MainPage () {
                                                 <path fill="currentColor"
                                                       d="M19.005 3.175H4.674C3.642 3.175 3 3.789 3 4.821V21.02l3.544-3.514h12.461c1.033 0 2.064-1.06 2.064-2.093V4.821c-.001-1.032-1.032-1.646-2.064-1.646zm-4.989 9.869H7.041V11.1h6.975v1.944zm3-4H7.041V7.1h9.975v1.944z"/>
                                             </svg>
-                                            <svg onClick={() => {setSettingsPopUp(!settingsPopUp)}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+                                            <svg ref={settingMenuRef} className={settingsPopUp ? "active" : ""} onClick={() => {setSettingsPopUp(!settingsPopUp)}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
                                                  height="24">
                                                 <path fill="currentColor"
                                                       d="M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 15z"/>
                                             </svg>
                                             {
                                                 settingsPopUp &&
-                                                <div className="settingsPopUp">
-                                                    <div className="settingsLink"><div>Profile</div></div>
-                                                    <div className="settingsLink"><div>Favourites</div></div>
-                                                    <div className="settingsLink"><div>Settings</div></div>
-                                                    <div className="settingsLink"><div>Logout</div></div>
+                                                <div className="settingsPopUp" ref={popUpRef}>
+                                                    <div className="settingsLink" onClick={() => {}}><div>Profile</div></div>
+                                                    <div className="settingsLink" onClick={() => {}}><div>Favourites</div></div>
+                                                    <div className="settingsLink" onClick={() => {}}><div>Settings</div></div>
+                                                    <div className="settingsLink" onClick={() => {dispatch(logoutUser())}}><div>Logout</div></div>
                                                 </div>
                                             }
                                         </div>

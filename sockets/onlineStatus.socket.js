@@ -38,7 +38,14 @@ module.exports = (socket,io) => {
     })
 
     socket.on('disconnect', () => {
+        disconnect()
+    })
 
+    socket.on('logout', () => {
+        disconnect()
+    })
+
+    const disconnect = () => {
         if (online.usersById[socket.userId] && online.usersById[socket.userId].length === 1) {
             changeStatus(socket.userId, false).then(deleteOnlineDialog)
         } else {
@@ -62,7 +69,7 @@ module.exports = (socket,io) => {
 
         delete online.users[socket.id]
         console.log(online.users)
-    })
+    }
 
     const changeStatus = async (userId, status) => {
         const user = await User.findById(userId);
