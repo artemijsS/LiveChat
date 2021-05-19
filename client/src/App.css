@@ -215,6 +215,7 @@ button:hover {
 .settings {
   width: 140px;
   height: 40px;
+  position: relative;
 }
 .settings svg {
   padding: 8px;
@@ -228,6 +229,35 @@ button:hover {
 .settings svg:active, .settings svg.active {
   background-color: rgba(145,145,145,0.3);
   border-radius: 50%;
+}
+
+.settingsPopUp {
+  position: absolute;
+  top: 40px;
+  right: 13px;
+  width: 193px;
+  height: 200px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 1px 2px 3px rgba(0,0,0, 0.4);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 6;
+  font-size: 15px;
+}
+
+.settingsLink {
+  display: flex;
+  justify-content: center;
+  height: 45px;
+}
+.settingsLink:hover {
+  cursor: pointer;
+  background-color: rgb(245,245,245);
+}
+.settingsLink div {
+  padding-top: 11px;
 }
 
 .chat-bar .box-header {
