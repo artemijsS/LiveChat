@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import { Helmet } from 'react-helmet';
-import {BackGround, Chat, Dialogs, FindNewDialog, Search} from "../Components";
+import {BackGround, Chat, Dialogs, FindNewDialog, Profile, Search} from "../Components";
 import axios from "axios";
 import {useAlert} from "react-alert";
 import socket from "../socket";
@@ -22,6 +22,8 @@ function MainPage () {
     const alert = useAlert()
 
     const [activeFindNewDialog, setActiveFindNewDialog] = useState(false)
+    const [profile, setProfile] = useState(false)
+
     const [messageText, setMessageText] = useState('')
     const [settingsPopUp, setSettingsPopUp] = useState(false)
 
@@ -105,25 +107,41 @@ function MainPage () {
                 <div className="main-box">
                     <div className="whats-app">
                         <div className="side-bar">
-                            { activeFindNewDialog
-                                ?
-                                    <>
-                                        <div className="find-header">
-                                            <div className="box">
-                                                <div className="back">
-                                                    <svg onClick={() => {setActiveFindNewDialog(false)}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 4l1.4 1.4L7.8 11H20v2H7.8l5.6 5.6L12 20l-8-8 8-8z"/></svg>
-                                                </div>
-                                                <div className="big-text">
-                                                    New Chat
-                                                </div>
+                            { activeFindNewDialog &&
+                                <>
+                                    <div className="find-header">
+                                        <div className="box">
+                                            <div className="back">
+                                                <svg onClick={() => {setActiveFindNewDialog(false)}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 4l1.4 1.4L7.8 11H20v2H7.8l5.6 5.6L12 20l-8-8 8-8z"/></svg>
+                                            </div>
+                                            <div className="big-text">
+                                                New Chat
                                             </div>
                                         </div>
-                                        <FindNewDialog/>
-                                    </>
-                                :
+                                    </div>
+                                    <FindNewDialog/>
+                                </>
+                            }
+                            {
+                                profile &&
+                                <>
+                                    <div className="find-header">
+                                        <div className="box">
+                                            <div className="back">
+                                                <svg onClick={() => {setProfile(false)}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 4l1.4 1.4L7.8 11H20v2H7.8l5.6 5.6L12 20l-8-8 8-8z"/></svg>
+                                            </div>
+                                            <div className="big-text">
+                                                Profile
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <Profile/>
+                                </>
+                            }
+                            { !activeFindNewDialog && !profile &&
                                 <div>
                                     <div className="box-header">
-                                        <img src={logo} alt="error"/>
+                                        <img onClick={() => {setProfile(true)}} src={logo} alt="error"/>
                                         <div className="settings">
                                             <svg id="ee51d023-7db6-4950-baf7-c34874b80976"
                                                  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
@@ -144,7 +162,7 @@ function MainPage () {
                                             {
                                                 settingsPopUp &&
                                                 <div className="settingsPopUp" ref={popUpRef}>
-                                                    <div className="settingsLink" onClick={() => {}}><div>Profile</div></div>
+                                                    <div className="settingsLink" onClick={() => {setProfile(true); setSettingsPopUp(false)}}><div>Profile</div></div>
                                                     <div className="settingsLink" onClick={() => {}}><div>Favourites</div></div>
                                                     <div className="settingsLink" onClick={() => {}}><div>Settings</div></div>
                                                     <div className="settingsLink" onClick={() => {dispatch(logoutUser())}}><div>Logout</div></div>
@@ -159,7 +177,7 @@ function MainPage () {
                                     <Search/>
                                     <Dialogs/>
                                 </div>
-                                }
+                            }
                         </div>
                         { activeDialog
                             ?

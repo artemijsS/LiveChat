@@ -230,6 +230,9 @@ button:hover {
   background-color: rgba(145,145,145,0.3);
   border-radius: 50%;
 }
+.settings svg:hover {
+  cursor: pointer;
+}
 
 .settingsPopUp {
   position: absolute;
@@ -272,6 +275,9 @@ button:hover {
 .chat-bar .box-header img {
   padding-right: 15px;
 }
+.box-header img:hover {
+  cursor: pointer;
+}
 
 .dialog-info {
   flex-grow: 1;
@@ -294,6 +300,72 @@ button:hover {
 
 .chat-bar .box-header .settings {
   width: 90px;
+}
+
+
+/*Profile*/
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: calc(100vh - 148px);
+  background-color: rgb(237,237,237);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.profile .image {
+  display: flex;
+  justify-content: center;
+  height: 200px;
+  margin: 28px 0;
+}
+.profile .image img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+.profile .name, .profile .about {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 71px;
+  padding: 14px 30px 10px 30px;
+  margin-bottom: 10px;
+  background-color: white;
+  box-shadow: 0 2px rgba(0,0,0,0.2);
+}
+.profile .name span, .profile .about span {
+  font-size: 14px;
+  color: #00bfa5;
+}
+.profile .update {
+  display: flex;
+  justify-content: space-between;
+  height: 36px;
+}
+.profile .update input {
+  flex-grow: 1;
+  font-size: 18px;
+  border: none;
+}
+.profile .update.borderBottom {
+  border-bottom: 2px solid #00bfa5;
+}
+.profile .update div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.profile .update div:hover {
+  cursor: pointer;
+}
+.profile .update svg {
+  color: rgb(145,145,145);
+}
+.profile .info {
+  height: 40px;
+  margin: 4px 20px 28px 30px;
 }
 
 /*search*/
