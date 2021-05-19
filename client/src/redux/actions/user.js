@@ -23,7 +23,8 @@ export const userDataFetch = (obj, path) => {
                         email: data.email,
                         telephone: data.telephone,
                         userId: data.userId,
-                        token: data.token
+                        token: data.token,
+                        role: data.role
                     }
                     dispatch(loginUser(user))
                     dispatch(setUserLoading(true))
@@ -59,7 +60,8 @@ export const getProfileFetch = () => {
                             email: data.email,
                             telephone: data.telephone,
                             userId: data.userId,
-                            token: token
+                            token: token,
+                            role: data.role
                         }
                         dispatch(loginUser(user))
                         socket.emit('userOnline', user.userId)

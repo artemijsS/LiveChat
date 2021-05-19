@@ -10,7 +10,8 @@ const schema = new Schema({
     last_time_seen: {type: String},
     photo: {type: String},
     dialogs: [{type: Types.ObjectId, ref: 'Dialog'}],
-    friends: [{type: Types.ObjectId, ref: 'User'}]
+    friends: [{type: Types.ObjectId, ref: 'User'}],
+    role: {type: String}
 })
 
 module.exports = model('User', schema)

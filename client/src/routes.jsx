@@ -27,6 +27,12 @@ export const useRoutes = () => {
                     <Route path="/" exact>
                         <MainPage/>
                     </Route>
+                    {
+                        userData.role === "admin" &&
+                        <Route path="/admin" exact>
+                            <div>ADMINKA</div>
+                        </Route>
+                    }
                     <Redirect to="/"/>
                 </Switch>
             )

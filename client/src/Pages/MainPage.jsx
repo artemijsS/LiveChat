@@ -8,6 +8,7 @@ import socket from "../socket";
 import logo from "../Components/images/logo.jpg";
 import {messageNewDelete, messagesNewSet} from "../redux/actions/message";
 import {dialogLastMessageSet, dialogLastMessageStatusSet, dialogOrderChange} from "../redux/actions/dialog";
+import {Link} from 'react-router-dom'
 
 
 function MainPage () {
@@ -15,7 +16,7 @@ function MainPage () {
     const dispatch = useDispatch()
 
     const {dialogs, activeDialog, dialogsOrder} = useSelector(({dialog}) => dialog)
-    const {token, userId} = useSelector(({user}) => user.userData)
+    const {token, userId, role} = useSelector(({user}) => user.userData)
 
     const alert = useAlert()
 
@@ -123,6 +124,10 @@ function MainPage () {
                                                       d="M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 15z"/>
                                             </svg>
                                         </div>
+                                        {
+                                            role === "admin" &&
+                                            <Link to="/admin">AdminPanel</Link>
+                                        }
                                     </div>
                                     <Search/>
                                     <Dialogs/>
