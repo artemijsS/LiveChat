@@ -35,9 +35,7 @@ const Dialogs = () => {
 
                     if (obj.dialog.last_message_time.split(' ')[0] === today) {
                         i = 1
-                    }
-
-                    if (obj.dialog.last_message_time.split(' ')[0] === yesterday) {
+                    } else if (obj.dialog.last_message_time.split(' ')[0] === yesterday) {
                         obj.dialog.last_message_time = 'yesterday'
                     }
 
