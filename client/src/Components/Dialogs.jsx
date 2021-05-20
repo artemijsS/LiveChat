@@ -45,7 +45,6 @@ const Dialogs = () => {
 
                     return (
                         <div onClick={() => {setActiveDialog(key)}} className={activeDialog === key ? "dialog active" : "dialog"} key={key}>
-                            {/*<img src={logo} alt="error"/>*/}
                             <Image cloudName="artemijss" publicId={obj.photo ? obj.photo : "tkixqcinuntqmalr2dej"}/>
                             <div className="details">
                                 <div className="dialog-info1">
