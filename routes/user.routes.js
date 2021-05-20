@@ -1,6 +1,7 @@
 const {Router} = require('express');
 const auth = require('../middleware/auth.middleware');
 const {check, validationResult} = require('express-validator')
+const { cloudinary } = require('../cloudinary');
 
 const User = require('../models/User');
 
@@ -56,21 +57,40 @@ router.post('/updateName', auth, [
 // api/user/updateAbout
 router.post('/updateAbout', auth, async (req, res) => {
 
-        try {
+    try {
 
-            const id = req.user.userId
-            const user = await User.findById(id)
+        const id = req.user.userId
+        const user = await User.findById(id)
 
-            user.description = req.body.about
+        user.description = req.body.about
 
-            await user.save()
-            res.json({ about: req.body.about })
+        await user.save()
+        res.json({ about: req.body.about })
 
-        } catch (e) {
-            res.status(500).json({ message: "Error" })
-        }
+    } catch (e) {
+        res.status(500).json({ message: "Error" })
+    }
 
-    })
+})
+
+// api/user/updateImage
+router.post('/updateImage', auth, async (req, res) => {
+
+    try {
+
+        const id = req.user.userId
+        const user = await User.findById(id)
+        const fileStr = req.body.data;
+        const uploadResponse = await cloudinary.uploader.upload(fileStr);
+        console.log(uploadResponse);
+
+        res.json({ image: req.body.image })
+
+    } catch (e) {
+        res.status(500).json({ message: "Error" })
+    }
+
+})
 
 
 module.exports = router;

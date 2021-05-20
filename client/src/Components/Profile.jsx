@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {updateAbout, updateName} from "../redux/actions/user";
 import axios from "axios";
-import logo from "./images/logo.jpg";
 import {useAlert} from "react-alert";
+import {Image} from "cloudinary-react";
+import logo from "./images/logo.jpg";
+
 
 const Profile = () => {
 
@@ -18,6 +20,8 @@ const Profile = () => {
     const [aboutInput, setAboutInput] = useState('')
 
     const alert = useAlert()
+
+    const imageInput = useRef()
 
     const changeName = () => {
         setInputName(true)
@@ -47,10 +51,20 @@ const Profile = () => {
         }
     }
 
+    const changeImage = (e) => {
+        const file = e.target.files[0];
+        if (!file)
+            return false
+        console.log(file)
+        console.log(11)
+    }
+
     return (
         <div className="profile">
             <div className="image">
-                <img src={logo} alt="error"/>
+                <input ref={imageInput} onChange={changeImage} style={{display: "none"}} type="file" accept="image/*"/>
+                <img onClick={() => imageInput.current.click()} src={logo} alt="error"/>
+                {/*<Image cloudName="demo" publicId="sample" width="200" crop="scale"/>*/}
             </div>
             <div className="name">
                 <span>Name</span>
