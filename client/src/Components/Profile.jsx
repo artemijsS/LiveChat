@@ -1,20 +1,46 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
+import {updateAbout, updateName} from "../redux/actions/user";
+import axios from "axios";
 import logo from "./images/logo.jpg";
+import {useAlert} from "react-alert";
 
 const Profile = () => {
 
-    const {name, description} = useSelector(({user}) => user.userData)
+    const dispatch = useDispatch()
+
+    const {name, description, token} = useSelector(({user}) => user.userData)
 
     const [inputName, setInputName] = useState(true)
     const [inputAbout, setInputAbout] = useState(true)
 
+    const [nameInput, setNameInput] = useState('')
+    const [aboutInput, setAboutInput] = useState('')
+
+    const alert = useAlert()
+
     const changeName = () => {
         setInputName(true)
+        if (nameInput !== name) {
+            axios.post('/api/user/updateName', {name: nameInput}, { headers: { Authorization: `Bearer ${token}` }}).then((res) => {
+                dispatch(updateName(res.data.name))
+                alert.success('Name was changed')
+            }, () => {
+                alert.show('Name can not be empty')
+            })
+        }
     }
 
     const changeAbout = () => {
         setInputAbout(true)
+        if (aboutInput !== description) {
+            axios.post('/api/user/updateAbout', {about: aboutInput}, { headers: { Authorization: `Bearer ${token}` }}).then((res) => {
+                dispatch(updateAbout(res.data.about))
+                alert.success('About was changed')
+            }, () => {
+                alert.show('Error')
+            })
+        }
     }
 
     return (
@@ -25,7 +51,7 @@ const Profile = () => {
             <div className="name">
                 <span>Name</span>
                 <div className={inputName ? "update" : " update borderBottom"}>
-                    <input type="text" defaultValue={name} readOnly={inputName}/>
+                    <input onChange={(e) => {setNameInput(e.target.value)}} type="text" defaultValue={name} readOnly={inputName}/>
                     { inputName
                         ?
                             <div onClick={() => {setInputName(false)}}>
@@ -42,7 +68,7 @@ const Profile = () => {
             <div className="about">
                 <span>About</span>
                 <div className={inputAbout ? "update" : " update borderBottom"}>
-                    <input type="text" defaultValue={description} placeholder={"enter about yourself"} readOnly={inputAbout}/>
+                    <input onChange={(e) => {setAboutInput(e.target.value)}} type="text" defaultValue={description} placeholder={"enter about yourself"} readOnly={inputAbout}/>
                     { inputAbout
                         ?
                         <div onClick={() => {setInputAbout(false)}}>

@@ -18,6 +18,22 @@ const user = (state = initialState, action) => {
                 ...state,
                 userData: {}
             }
+        case 'USER_UPDATE_NAME':
+            return {
+                ...state,
+                userData: {
+                    ...state.userData,
+                    name: action.payload
+                }
+            }
+        case 'USER_UPDATE_ABOUT':
+            return {
+                ...state,
+                userData: {
+                    ...state.userData,
+                    description: action.payload
+                }
+            }
         default:
             return state
     }

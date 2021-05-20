@@ -24,7 +24,8 @@ export const userDataFetch = (obj, path) => {
                         telephone: data.telephone,
                         userId: data.userId,
                         token: data.token,
-                        role: data.role
+                        role: data.role,
+                        description: data.description
                     }
                     dispatch(loginUser(user))
                     dispatch(setUserLoading(true))
@@ -61,7 +62,8 @@ export const getProfileFetch = () => {
                             telephone: data.telephone,
                             userId: data.userId,
                             token: token,
-                            role: data.role
+                            role: data.role,
+                            description: data.description
                         }
                         dispatch(loginUser(user))
                         socket.emit('userOnline', user.userId)
@@ -84,4 +86,14 @@ export const logoutUser = () => {
 const loginUser = obj => ({
     type: 'USER_LOGIN',
     payload: obj
+})
+
+export const updateName = name => ({
+    type: 'USER_UPDATE_NAME',
+    payload: name
+})
+
+export const updateAbout = about => ({
+    type: 'USER_UPDATE_ABOUT',
+    payload: about
 })
