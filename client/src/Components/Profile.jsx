@@ -27,6 +27,8 @@ const Profile = () => {
                 alert.success('Name was changed')
             }, () => {
                 alert.show('Name can not be empty')
+                const inName = document.getElementById('nameInput')
+                inName.value = name
             })
         }
     }
@@ -39,6 +41,8 @@ const Profile = () => {
                 alert.success('About was changed')
             }, () => {
                 alert.show('Error')
+                const inAbout = document.getElementById('aboutInput')
+                inAbout.value = description
             })
         }
     }
@@ -51,7 +55,7 @@ const Profile = () => {
             <div className="name">
                 <span>Name</span>
                 <div className={inputName ? "update" : " update borderBottom"}>
-                    <input onChange={(e) => {setNameInput(e.target.value)}} type="text" defaultValue={name} readOnly={inputName}/>
+                    <input id="nameInput" onChange={(e) => {setNameInput(e.target.value)}} type="text" defaultValue={name} readOnly={inputName}/>
                     { inputName
                         ?
                             <div onClick={() => {setInputName(false)}}>
@@ -68,7 +72,7 @@ const Profile = () => {
             <div className="about">
                 <span>About</span>
                 <div className={inputAbout ? "update" : " update borderBottom"}>
-                    <input onChange={(e) => {setAboutInput(e.target.value)}} type="text" defaultValue={description} placeholder={"enter about yourself"} readOnly={inputAbout}/>
+                    <input id="aboutInput" onChange={(e) => {setAboutInput(e.target.value)}} type="text" defaultValue={description} placeholder={"enter about yourself"} readOnly={inputAbout}/>
                     { inputAbout
                         ?
                         <div onClick={() => {setInputAbout(false)}}>
