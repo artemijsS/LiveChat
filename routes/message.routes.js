@@ -1,3 +1,4 @@
+const mongoose = require("mongoose")
 const {Router} = require('express');
 const auth = require('../middleware/auth.middleware');
 const Message = require('../models/Message');
@@ -79,6 +80,67 @@ router.get('/find/:id', auth, async (req, res) => {
         }
 
         const docs = await Message.find({ "dialogId": dialogId }).sort({created_at: -1})
+        res.json(docs)
+
+    } catch (e) {
+        res.status(500).json({ message: "Error" })
+    }
+
+})
+
+// api/message/finds/:id
+router.get('/finds/:id', auth, async (req, res) => {
+
+    try {
+        const dialogId = req.params.id
+        const userId = req.user.userId
+
+        const user = await User.findById(userId)
+        if (user.dialogs.indexOf(dialogId) === -1) {
+            return res.status(401).json({ message: "You don't have permission" })
+        }
+
+        const docs = await Message.aggregate([
+            {
+                $match: {
+                    'dialogId': mongoose.Types.ObjectId(dialogId)
+                }
+            },
+            {
+                $project: {
+                    created_at: {
+                        $dateToString: { format:"%Y-%m-%d", date:"$created_at" }
+                    },
+                    text:1,
+                    owner:1,
+                    recipient:1,
+                    time:1,
+                    status:1,
+                    id: '$_id'
+                }
+            },
+            {
+                $group: {
+                    _id: {created_at:"$created_at"},
+                    msg: {
+                        $push: {
+                            text: '$test',
+                            owner: '$owner',
+                            recipient: '$recipient',
+                            time: '$time',
+                            status: '$status',
+                            id: '$_id'
+                        }
+                    }
+                }
+            },
+            {
+                $sort: {
+                    "_id.created_at":-1
+                }
+            }
+        ])
+
         res.json(docs)
 
     } catch (e) {
