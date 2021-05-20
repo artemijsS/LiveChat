@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {activeDialogSet} from "../redux/actions/dialog";
 import {Image} from "cloudinary-react";
@@ -10,6 +10,17 @@ const Dialogs = () => {
     const {dialogs, activeDialog, dialogsOrder} = useSelector(({dialog}) => dialog)
     const {userData} = useSelector(({user}) => user)
 
+    const [today, setToday] = useState('');
+    const [yesterday, setYesterday] = useState('');
+
+    useEffect(() => {
+        let yesterday = new Date()
+        yesterday.setDate(yesterday.getDate() - 1)
+        yesterday = getDate(yesterday)
+        setYesterday(yesterday)
+        setToday(getDate())
+    }, [])
+
     const setActiveDialog = (id) => {
         dispatch(activeDialogSet(id))
     }
@@ -20,18 +31,29 @@ const Dialogs = () => {
                 dialogsOrder.map(key => {
 
                     const obj = dialogs[key]
+                    let i = 0;
+
+                    if (obj.dialog.last_message_time.split(' ')[0] === today) {
+                        i = 1
+                    }
+
+                    if (obj.dialog.last_message_time.split(' ')[0] === yesterday) {
+                        obj.dialog.last_message_time = 'yesterday'
+                    }
+
+
 
                     return (
                         <div onClick={() => {setActiveDialog(key)}} className={activeDialog === key ? "dialog active" : "dialog"} key={key}>
                             {/*<img src={logo} alt="error"/>*/}
-                            <Image cloudName="artemijss" publicId={obj.photo ? obj.photo : "tkixqcinuntqmalr2dej"} crop="scale"/>
+                            <Image cloudName="artemijss" publicId={obj.photo ? obj.photo : "tkixqcinuntqmalr2dej"}/>
                             <div className="details">
                                 <div className="dialog-info1">
                                     <div className={`dialog-name big-text ${obj.dialog.last_message_owner !== userData.userId && !obj.dialog.last_message_status ? "bold" : ""}`}>
                                         {obj.name}
                                     </div>
                                     <div className={`mssg-time ${obj.dialog.last_message_owner !== userData.userId && !obj.dialog.last_message_status ? "black bold" : ""}`}>
-                                        {obj.dialog.last_message_time ? obj.dialog.last_message_time.split(' ')[1] : ""}
+                                        {obj.dialog.last_message_time ? obj.dialog.last_message_time.split(' ')[i] : ""}
                                     </div>
                                 </div>
                                 <div className="last-message_notification">
@@ -68,3 +90,16 @@ const Dialogs = () => {
 }
 
 export default Dialogs;
+
+const getDate = (date_obj = new Date()) => {
+
+    let day = date_obj.getDate();
+    if (day < 10) day = '0' + day;
+
+    let month = date_obj.getMonth() + 1;
+    if (month < 10) month = '0' + month;
+
+    let year = date_obj.getFullYear();
+
+    return  `${day}/${month}/${year}`;
+}
