@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux'
-import logo from "./images/logo.jpg"
 import axios from "axios";
 import {createDialog} from "../redux/actions/dialog";
+import {Image} from "cloudinary-react";
 
 
 const FindNewDialog = () => {
@@ -39,7 +39,8 @@ const FindNewDialog = () => {
                     dialogs.map((user, i) => {
                         return (
                             <div onClick={() => createNewDialog(user._id)} className="dialog" key={user._id+i}>
-                                <img src={logo} alt="error"/>
+                                <Image cloudName="artemijss" publicId={user.photo ? user.photo : "tkixqcinuntqmalr2dej"} crop="scale"/>
+                                {/*<img src={logo} alt="error"/>*/}
                                 <div className="details">
                                     <div className="dialog-info1">
                                         <div className="dialog-name big-text">

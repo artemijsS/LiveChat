@@ -34,6 +34,14 @@ const user = (state = initialState, action) => {
                     description: action.payload
                 }
             }
+        case 'USER_UPDATE_PHOTO':
+            return {
+                ...state,
+                userData: {
+                    ...state.userData,
+                    photo: action.payload
+                }
+            }
         default:
             return state
     }

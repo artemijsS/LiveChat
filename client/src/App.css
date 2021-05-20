@@ -211,6 +211,9 @@ button:hover {
   height: 40px;
   border-radius: 50%;
 }
+.box-header .padding {
+  padding-right: 15px;
+}
 
 .settings {
   width: 140px;
@@ -271,10 +274,6 @@ button:hover {
 
 }
 
-
-.chat-bar .box-header img {
-  padding-right: 15px;
-}
 .box-header img:hover {
   cursor: pointer;
 }
@@ -319,6 +318,7 @@ button:hover {
   justify-content: center;
   height: 200px;
   margin: 28px 0;
+  position: relative;
 }
 .profile .image img {
   width: 200px;
@@ -329,6 +329,16 @@ button:hover {
   opacity: 0.6;
   cursor: pointer;
 }
+.changePhoto {
+  position: absolute;
+  top:45%;
+  color: #555555;
+}
+.profile .image .loadingChatBlock {
+  position: absolute;
+  top:33%;
+}
+
 .profile .name, .profile .about {
   display: flex;
   flex-direction: column;
@@ -437,6 +447,7 @@ button:hover {
   width: 49px;
   height: 49px;
   padding: 0 13px 0 15px;
+  border-radius: 50%;
 }
 
 .dialog .details {

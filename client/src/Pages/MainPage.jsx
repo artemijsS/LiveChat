@@ -5,11 +5,11 @@ import {BackGround, Chat, Dialogs, FindNewDialog, Profile, Search} from "../Comp
 import axios from "axios";
 import {useAlert} from "react-alert";
 import socket from "../socket";
-import logo from "../Components/images/logo.jpg";
 import {messageNewDelete, messagesNewSet} from "../redux/actions/message";
 import {dialogLastMessageSet, dialogLastMessageStatusSet, dialogOrderChange} from "../redux/actions/dialog";
 import {Link} from 'react-router-dom'
 import {logoutUser} from "../redux/actions/user";
+import {Image} from "cloudinary-react";
 
 
 function MainPage () {
@@ -17,7 +17,7 @@ function MainPage () {
     const dispatch = useDispatch()
 
     const {dialogs, activeDialog, dialogsOrder} = useSelector(({dialog}) => dialog)
-    const {token, userId, role} = useSelector(({user}) => user.userData)
+    const {token, userId, role, photo} = useSelector(({user}) => user.userData)
 
     const alert = useAlert()
 
@@ -141,7 +141,7 @@ function MainPage () {
                             { !activeFindNewDialog && !profile &&
                                 <div>
                                     <div className="box-header">
-                                        <img onClick={() => {setProfile(true)}} src={logo} alt="error"/>
+                                        <Image onClick={() => setProfile(true)} cloudName="artemijss" publicId={photo ? photo : "tkixqcinuntqmalr2dej"}/>
                                         <div className="settings">
                                             <svg id="ee51d023-7db6-4950-baf7-c34874b80976"
                                                  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
@@ -183,7 +183,10 @@ function MainPage () {
                             ?
                                 <div className="chat-bar">
                                     <div className="box-header">
-                                        <img src={logo} alt="error"/>
+                                        {/*<img src={logo} alt="error"/>*/}
+                                        <div className="padding">
+                                            <Image cloudName="artemijss" publicId={dialogs[activeDialog].photo ? dialogs[activeDialog].photo : "tkixqcinuntqmalr2dej"} crop="scale"/>
+                                        </div>
                                         <div className="dialog-info">
                                             <div className="dialog-name">
                                                 {dialogs[activeDialog].name}

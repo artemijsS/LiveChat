@@ -1,23 +1,23 @@
 import React, {useRef, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {updateAbout, updateName} from "../redux/actions/user";
+import {updateAbout, updateName, updatePhoto} from "../redux/actions/user";
 import axios from "axios";
 import {useAlert} from "react-alert";
 import {Image} from "cloudinary-react";
-import logo from "./images/logo.jpg";
 
 
 const Profile = () => {
 
     const dispatch = useDispatch()
 
-    const {name, description, token} = useSelector(({user}) => user.userData)
+    const {name, description, token, photo} = useSelector(({user}) => user.userData)
 
     const [inputName, setInputName] = useState(true)
     const [inputAbout, setInputAbout] = useState(true)
 
     const [nameInput, setNameInput] = useState('')
     const [aboutInput, setAboutInput] = useState('')
+    const [loadingPhoto, setLoadingPhoto] = useState(false)
 
     const alert = useAlert()
 
@@ -52,19 +52,42 @@ const Profile = () => {
     }
 
     const changeImage = (e) => {
-        const file = e.target.files[0];
+        const file = e.target.files[0]
         if (!file)
             return false
-        console.log(file)
-        console.log(11)
+        setLoadingPhoto(true)
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onloadend = () => {
+            uploadImage(reader.result)
+        };
+
     }
+
+    const uploadImage = async (base64EncodedImage) => {
+        axios.post('/api/user/updateImage', {img: base64EncodedImage}, { headers: { Authorization: `Bearer ${token}` }}).then((res) => {
+            dispatch(updatePhoto(res.data.photo))
+            setLoadingPhoto(false)
+        }, () => {
+            alert.show('error')
+            setLoadingPhoto(false)
+        })
+    };
 
     return (
         <div className="profile">
             <div className="image">
                 <input ref={imageInput} onChange={changeImage} style={{display: "none"}} type="file" accept="image/*"/>
-                <img onClick={() => imageInput.current.click()} src={logo} alt="error"/>
-                {/*<Image cloudName="demo" publicId="sample" width="200" crop="scale"/>*/}
+                <div className="changePhoto">
+                    Change photo
+                </div>
+
+                <Image onClick={() => imageInput.current.click()} cloudName="artemijss" publicId={photo ? photo : "tkixqcinuntqmalr2dej"} crop="scale"/>
+                { loadingPhoto &&
+                    <div className="loadingChatBlock">
+                        <div className="spinner spinner-1"/>
+                    </div>
+                }
             </div>
             <div className="name">
                 <span>Name</span>

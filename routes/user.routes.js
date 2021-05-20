@@ -17,7 +17,7 @@ router.post('/find', auth, async (req, res) => {
 
         const docs = await User.find({
             telephone: {$regex: telephone, $options: 'i'},
-            $and: [ {_id: { $ne: id }}, {_id: { $not: { $in: user.friends }} }]},"name telephone")
+            $and: [ {_id: { $ne: id }}, {_id: { $not: { $in: user.friends }} }]},"name telephone photo")
 
         res.json(docs)
     } catch (e) {
@@ -80,11 +80,13 @@ router.post('/updateImage', auth, async (req, res) => {
 
         const id = req.user.userId
         const user = await User.findById(id)
-        const fileStr = req.body.data;
-        const uploadResponse = await cloudinary.uploader.upload(fileStr);
-        console.log(uploadResponse);
+        const fileStr = req.body.img
+        const uploadResponse = await cloudinary.uploader.upload(fileStr)
+        console.log(uploadResponse.public_id)
+        user.photo = uploadResponse.public_id
+        await user.save()
 
-        res.json({ image: req.body.image })
+        res.json({ photo: user.photo })
 
     } catch (e) {
         res.status(500).json({ message: "Error" })

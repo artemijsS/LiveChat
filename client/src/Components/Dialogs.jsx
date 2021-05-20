@@ -1,8 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {activeDialogSet} from "../redux/actions/dialog";
-
-import logo from "./images/logo.jpg";
+import {Image} from "cloudinary-react";
 
 const Dialogs = () => {
 
@@ -24,7 +23,8 @@ const Dialogs = () => {
 
                     return (
                         <div onClick={() => {setActiveDialog(key)}} className={activeDialog === key ? "dialog active" : "dialog"} key={key}>
-                            <img src={logo} alt="error"/>
+                            {/*<img src={logo} alt="error"/>*/}
+                            <Image cloudName="artemijss" publicId={obj.photo ? obj.photo : "tkixqcinuntqmalr2dej"} crop="scale"/>
                             <div className="details">
                                 <div className="dialog-info1">
                                     <div className={`dialog-name big-text ${obj.dialog.last_message_owner !== userData.userId && !obj.dialog.last_message_status ? "bold" : ""}`}>
