@@ -82,7 +82,7 @@ router.post('/updateImage', auth, async (req, res) => {
         const user = await User.findById(id)
         const fileStr = req.body.img
         const uploadResponse = await cloudinary.uploader.upload(fileStr)
-        console.log(uploadResponse.public_id)
+        await cloudinary.uploader.destroy(user.photo)
         user.photo = uploadResponse.public_id
         await user.save()
 

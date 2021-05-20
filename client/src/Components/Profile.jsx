@@ -15,8 +15,8 @@ const Profile = () => {
     const [inputName, setInputName] = useState(true)
     const [inputAbout, setInputAbout] = useState(true)
 
-    const [nameInput, setNameInput] = useState('')
-    const [aboutInput, setAboutInput] = useState('')
+    const [nameInput, setNameInput] = useState(name)
+    const [aboutInput, setAboutInput] = useState(description)
     const [loadingPhoto, setLoadingPhoto] = useState(false)
 
     const alert = useAlert()
@@ -82,7 +82,7 @@ const Profile = () => {
                     Change photo
                 </div>
 
-                <Image onClick={() => imageInput.current.click()} cloudName="artemijss" publicId={photo ? photo : "tkixqcinuntqmalr2dej"} crop="scale"/>
+                <Image onClick={() => imageInput.current.click()} cloudName="artemijss" publicId={photo ? photo : "tkixqcinuntqmalr2dej"}/>
                 { loadingPhoto &&
                     <div className="loadingChatBlock">
                         <div className="spinner spinner-1"/>
