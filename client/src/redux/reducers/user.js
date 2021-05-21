@@ -2,7 +2,11 @@ import socket from "../../socket";
 
 const initialState = {
     userData: {},
-    loading: false
+    loading: false,
+    infoAboutUser: {
+        bool: false,
+        id: null
+    }
 }
 
 const user = (state = initialState, action) => {
@@ -41,6 +45,11 @@ const user = (state = initialState, action) => {
                     ...state.userData,
                     photo: action.payload
                 }
+            }
+        case 'INFO_ABOUT_USER_SET':
+            return {
+                ...state,
+                infoAboutUser: action.payload
             }
         default:
             return state

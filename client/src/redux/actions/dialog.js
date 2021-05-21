@@ -17,6 +17,8 @@ export const createDialog = (token, userId) => {
         return axios.post("/api/dialog/new", {userId},{ headers: { Authorization:`Bearer ${token}`}}).then(res => {
             dispatch(dialogsFetch(token)).then(() => {dispatch(activeDialogSet(res.data))})
             socket.emit('newDialog', res.data)
+        }, () => {
+            return -1
         })
     }
 }
@@ -78,5 +80,21 @@ export const dialogLastMessageStatusSet = (dialogId) => {
         type: 'DIALOG_LAST_MESSAGE_STATUS_SET',
         payload: true,
         dialogId: dialogId
+    }
+}
+
+export const deleteDialog = (dialogId, token, id = '') => {
+    return dispatch => {
+        return axios.post("/api/dialog/delete", {dialogId: dialogId, id: id},{ headers: { Authorization:`Bearer ${token}`}}).then(() => {
+            dispatch(activeDialogSet(''))
+            dispatch(deleteDialogOne(dialogId))
+        })
+    }
+}
+
+export const deleteDialogOne = (dialogId) => {
+    return {
+        type: 'DIALOG_DELETE_ONE',
+        payload: dialogId
     }
 }

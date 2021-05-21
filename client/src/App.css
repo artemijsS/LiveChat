@@ -282,6 +282,9 @@ button:hover {
   flex-grow: 1;
   width: 60%;
 }
+.dialog-info:hover {
+  cursor: pointer;
+}
 
 .box-header .dialog-name {
   font-size: 16px;
@@ -646,6 +649,108 @@ button:hover {
   color: grey;
 }
 
+/*userInfo*/
+
+.userInfo {
+  width: 50%;
+  min-width: 400px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-left: 2px solid rgb(218,218,218);
+  background-color: rgb(237,237,237);
+  flex: 1;
+}
+.userInfo .box-header {
+  border-left: 1px solid rgb(218,218,218);
+  min-height: 39px;
+}
+.userInfo .box-header svg {
+  color: rgb(145,145,145);
+  margin-right: 30px;
+}
+.userInfo .box-header svg:hover {
+  cursor: pointer;
+}
+.userInfo .box-header .title {
+  flex: 1;
+}
+.userInfo .user {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.userInfo .info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 28px;
+  position: relative;
+  background-color: white;
+  box-shadow: 0 2px rgba(0,0,0,0.2);
+}
+.userInfo .info img {
+  margin: 30px 0;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+.userInfo .info .name {
+  font-size: 19px;
+  margin-bottom: 5px;
+}
+.userInfo .info .status {
+  font-size: 14px;
+  color: #00000073;
+  margin-bottom: 15px;
+}
+.userInfo .info .name, .userInfo .info .status {
+  width: 81%;
+}
+.userInfo .about {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 71px;
+  padding: 14px 30px 10px 30px;
+  margin-bottom: 10px;
+  background-color: white;
+  box-shadow: 0 2px rgba(0,0,0,0.2);
+}
+.userInfo .about span {
+  font-size: 14px;
+  color: #00bfa5;
+}
+.userInfo .button {
+  display: flex;
+  height: 60px;
+  margin-bottom: 10px;
+  background-color: white;
+  align-items: center;
+  padding: 0 30px;
+  box-shadow: 0 2px rgba(0,0,0,0.2);
+}
+.userInfo .button:hover {
+  cursor: pointer;
+  background-color: rgb(245,245,245);
+}
+.userInfo .button .svg {
+  width: 24px;
+  display: flex;
+  height: 60px;
+  margin-bottom: 10px;
+  background-color: white;
+  padding-right: 30px;
+}
+.userInfo .loadingChatBlock {
+  position: absolute;
+  left: 50%;
+  margin-left: -50px;
+  top: 50%;
+  margin-top: -50px;
+}
+
+
 /*LOADING*/
 
 
@@ -847,6 +952,22 @@ button:hover {
 
 .black {
   color: black;
+}
+
+.flex1 {
+  flex:1;
+}
+
+.paddingLeft20 {
+  padding-left: 20px;
+}
+
+.red {
+  color: rgb(214,48,46);
+}
+
+.salat {
+  color: #00bfa5;
 }
 
 /*DISPLAY NONE*/

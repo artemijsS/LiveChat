@@ -4,7 +4,7 @@ import axios from "axios";
 
 const Chat = () => {
 
-    const {activeDialog} = useSelector(({dialog}) => dialog)
+    const {activeDialog, dialogs} = useSelector(({dialog}) => dialog)
     const {token, userId} = useSelector(({user}) => user.userData)
     const {newMessages, status} = useSelector(({message}) => message)
 
@@ -44,6 +44,9 @@ const Chat = () => {
 
     return (
         <div className="chat">
+            { dialogs[activeDialog].deleted &&
+                <div className="date"><span>THIS CHAT IS DELETED YOU CANT SEND MESSAGES</span></div>
+            }
             {
                 newMessages && newMessages.map((obj, i) => {
                     return (
@@ -81,7 +84,7 @@ const Chat = () => {
                             <div key={msg.id}>
                                 {
                                     j === obj.msg.length-1 &&
-                                    <div className="date"><span>{today === obj._id.created_at ? "TODAY" : obj._id.created_at === yesterday ? "YESTERDAY" : obj._id.created_at}</span></div>
+                                    <div className="date"><span>{today === msg.time.split(' ')[0] ? "TODAY" : msg.time.split(' ')[0] === yesterday ? "YESTERDAY" : obj._id.created_at}</span></div>
                                 }
                                 <div className={`message-block ${userId === msg.owner ? "message-out" : "message-in"}`} key={j+msg.id}>
                                      <div className="message">

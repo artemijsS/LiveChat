@@ -87,6 +87,20 @@ const dialog = (state = initialState, action) => {
                     }
                 }
             }
+        case 'DIALOG_DELETE_ONE':
+
+            const obj = state.dialogs
+            delete obj[action.payload]
+
+            const arr = state.dialogsOrder
+
+            arr.splice(arr.indexOf(action.payload), 1)
+
+            return {
+                ...state,
+                dialogs: obj,
+                dialogsOrder: arr
+            }
         default:
             return state
     }

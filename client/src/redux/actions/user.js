@@ -104,3 +104,8 @@ export const updatePhoto = img => ({
     type: 'USER_UPDATE_PHOTO',
     payload: img
 })
+
+export const infoAboutUserSet = obj => ({
+    type: 'INFO_ABOUT_USER_SET',
+    payload: obj
+})

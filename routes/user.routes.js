@@ -26,6 +26,19 @@ router.post('/find', auth, async (req, res) => {
 
 })
 
+// api/user/find/:id
+router.get('/find/:id', auth, async (req, res) => {
+
+    try {
+        const user = await User.findById(req.params.id, 'name status photo telephone email about')
+
+        res.json(user)
+    } catch (e) {
+        res.status(500).json({ message: "Error" })
+    }
+
+})
+
 // api/user/updateName
 router.post('/updateName', auth, [
         check('name', 'Name can not be empty').notEmpty()

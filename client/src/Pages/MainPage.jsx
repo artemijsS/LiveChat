@@ -1,14 +1,14 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import { Helmet } from 'react-helmet';
-import {BackGround, Chat, Dialogs, FindNewDialog, Profile, Search} from "../Components";
+import {BackGround, Chat, Dialogs, FindNewDialog, Profile, Search, UserInfo} from "../Components";
 import axios from "axios";
 import {useAlert} from "react-alert";
 import socket from "../socket";
 import {messageNewDelete, messagesNewSet} from "../redux/actions/message";
 import {dialogLastMessageSet, dialogLastMessageStatusSet, dialogOrderChange} from "../redux/actions/dialog";
 import {Link} from 'react-router-dom'
-import {logoutUser} from "../redux/actions/user";
+import {infoAboutUserSet, logoutUser} from "../redux/actions/user";
 import {Image} from "cloudinary-react";
 
 
@@ -18,11 +18,13 @@ function MainPage () {
 
     const {dialogs, activeDialog, dialogsOrder} = useSelector(({dialog}) => dialog)
     const {token, userId, role, photo} = useSelector(({user}) => user.userData)
+    const {infoAboutUser} = useSelector(({user}) => user)
 
     const alert = useAlert()
 
     const [activeFindNewDialog, setActiveFindNewDialog] = useState(false)
     const [profile, setProfile] = useState(false)
+    const [userInfo, setUserInfo] = useState(infoAboutUser.bool)
 
     const [messageText, setMessageText] = useState('')
     const [settingsPopUp, setSettingsPopUp] = useState(false)
@@ -39,6 +41,14 @@ function MainPage () {
                 dispatch(dialogLastMessageStatusSet(activeDialog))
         }
     }, [activeDialog])
+
+    useEffect(() => {
+        if (!infoAboutUser.bool) {
+            setUserInfo(false)
+        } else {
+            setUserInfo(true)
+        }
+    }, [infoAboutUser])
 
     const handleOutsideClick = (e) => {
         if (!e.composedPath().includes(popUpRef.current) && !e.composedPath().includes(settingMenuRef.current)) {
@@ -59,6 +69,11 @@ function MainPage () {
         const input = document.querySelector('#sendMessageInput')
         input.value = ""
 
+        if (dialogs[activeDialog].deleted) {
+            alert.show('THIS CHAT IS DELETED YOU CANT SEND MESSAGES')
+            return false
+        }
+
         const message = {
             recipient: dialogs[activeDialog].id,
             text: messageText,
@@ -72,7 +87,7 @@ function MainPage () {
 
         axios.post("/api/message/new", message, { headers: { Authorization: `Bearer ${token}` }}).then(message => {
             socket.emit('newMessage', message.data)
-        }, err => {
+        }, () => {
             alert.show('Error with sending message')
         })
 
@@ -95,6 +110,13 @@ function MainPage () {
             dispatch(dialogOrderChange(activeDialog))
 
         setMessageText('')
+    }
+
+    const userInfoShow = () => {
+        if (infoAboutUser.id) {
+            dispatch(infoAboutUserSet({bool: true, id: null}))
+        }
+        setUserInfo(true)
     }
 
     return (
@@ -179,39 +201,41 @@ function MainPage () {
                                 </div>
                             }
                         </div>
-                        { activeDialog
-                            ?
-                                <div className="chat-bar">
-                                    <div className="box-header">
-                                        {/*<img src={logo} alt="error"/>*/}
-                                        <div className="padding">
-                                            <Image cloudName="artemijss" publicId={dialogs[activeDialog].photo ? dialogs[activeDialog].photo : "tkixqcinuntqmalr2dej"} crop="scale"/>
+                        { activeDialog &&
+                            <div className="chat-bar">
+                                <div className="box-header">
+                                    <div className="padding">
+                                        <Image onClick={() => userInfoShow()} cloudName="artemijss" publicId={dialogs[activeDialog].photo ? dialogs[activeDialog].photo : "tkixqcinuntqmalr2dej"} crop="scale"/>
+                                    </div>
+                                    <div onClick={() => userInfoShow()} className="dialog-info">
+                                        <div className="dialog-name">
+                                            {dialogs[activeDialog].name}
                                         </div>
-                                        <div className="dialog-info">
-                                            <div className="dialog-name">
-                                                {dialogs[activeDialog].name}
-                                            </div>
-                                            <div className="last-time-seen">
-                                                {dialogs[activeDialog].status ? "online" : "offline"}
-                                            </div>
-                                        </div>
-                                        <div className="settings">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M15.9 14.3H15l-.3-.3c1-1.1 1.6-2.7 1.6-4.3 0-3.7-3-6.7-6.7-6.7S3 6 3 9.7s3 6.7 6.7 6.7c1.6 0 3.2-.6 4.3-1.6l.3.3v.8l5.1 5.1 1.5-1.5-5-5.2zm-6.2 0c-2.6 0-4.6-2.1-4.6-4.6s2.1-4.6 4.6-4.6 4.6 2.1 4.6 4.6-2 4.6-4.6 4.6z"/></svg>
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 15z"/></svg>
+                                        <div className="last-time-seen">
+                                            {dialogs[activeDialog].status ? "online" : "offline"}
                                         </div>
                                     </div>
-                                    <Chat/>
-                                    <div className="footer">
-                                        <div className="box">
-                                            <form onSubmit={sendMessage} className="input-box">
-                                                <input onChange={e => setMessageText(e.target.value)} id="sendMessageInput" type="text" placeholder="Введите сообщение"/>
-                                                <svg onClick={sendMessage} type="submit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"/></svg>
-                                            </form>
-                                        </div>
+                                    <div className="settings">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M15.9 14.3H15l-.3-.3c1-1.1 1.6-2.7 1.6-4.3 0-3.7-3-6.7-6.7-6.7S3 6 3 9.7s3 6.7 6.7 6.7c1.6 0 3.2-.6 4.3-1.6l.3.3v.8l5.1 5.1 1.5-1.5-5-5.2zm-6.2 0c-2.6 0-4.6-2.1-4.6-4.6s2.1-4.6 4.6-4.6 4.6 2.1 4.6 4.6-2 4.6-4.6 4.6z"/></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 7a2 2 0 1 0-.001-4.001A2 2 0 0 0 12 7zm0 2a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 9zm0 6a2 2 0 1 0-.001 3.999A2 2 0 0 0 12 15z"/></svg>
                                     </div>
                                 </div>
-                            :
-                                <div className="chat-bar"/>
+                                <Chat/>
+                                <div className="footer">
+                                    <div className="box">
+                                        <form onSubmit={sendMessage} className="input-box">
+                                            <input onChange={e => setMessageText(e.target.value)} id="sendMessageInput" type="text" placeholder="Введите сообщение" disabled={dialogs[activeDialog].deleted}/>
+                                            <svg role="button" onClick={sendMessage} type="submit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"/></svg>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        { !activeDialog && !userInfo &&
+                            <div className="chat-bar"/>
+                        }
+                        { userInfo &&
+                            <UserInfo/>
                         }
                     </div>
                 </div>

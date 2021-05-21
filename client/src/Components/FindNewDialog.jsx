@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 import axios from "axios";
-import {createDialog} from "../redux/actions/dialog";
 import {Image} from "cloudinary-react";
+import {infoAboutUserSet} from "../redux/actions/user";
 
 
 const FindNewDialog = () => {
@@ -10,6 +10,7 @@ const FindNewDialog = () => {
     const dispatch = useDispatch();
 
     const {token} = useSelector(({user}) => user.userData)
+    const {infoAboutUser} = useSelector(({user}) => user)
 
     const [dialogs, setDialogs] = useState([]);
 
@@ -20,8 +21,10 @@ const FindNewDialog = () => {
             })
     }
 
-    const createNewDialog = (userId) => {
-        dispatch(createDialog(token, userId))
+    const openUserProfile = (userId) => {
+        if (userId !== infoAboutUser.id)
+            dispatch(infoAboutUserSet({bool: true, id: userId}))
+        // dispatch(createDialog(token, userId))
     }
 
     return (
@@ -38,7 +41,7 @@ const FindNewDialog = () => {
                 {
                     dialogs.map((user, i) => {
                         return (
-                            <div onClick={() => createNewDialog(user._id)} className="dialog" key={user._id+i}>
+                            <div onClick={() => openUserProfile(user._id)} className="dialog" key={user._id+i}>
                                 <Image cloudName="artemijss" publicId={user.photo ? user.photo : "tkixqcinuntqmalr2dej"} crop="scale"/>
                                 {/*<img src={logo} alt="error"/>*/}
                                 <div className="details">
