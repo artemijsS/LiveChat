@@ -39,8 +39,6 @@ const Dialogs = () => {
                         obj.dialog.last_message_time = 'yesterday'
                     }
 
-
-
                     return (
                         <div onClick={() => {setActiveDialog(key)}} className={activeDialog === key ? "dialog active" : "dialog"} key={key}>
                             <Image cloudName="artemijss" publicId={obj.photo ? obj.photo : "tkixqcinuntqmalr2dej"}/>
