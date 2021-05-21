@@ -78,7 +78,7 @@ const Chat = () => {
                 !loading && messages.map((obj) => {
                     return obj.msg.map((msg, j) => {
                         return (
-                            <div>
+                            <div key={msg.id}>
                                 {
                                     j === obj.msg.length-1 &&
                                     <div className="date"><span>{today === obj._id.created_at ? "TODAY" : obj._id.created_at === yesterday ? "YESTERDAY" : obj._id.created_at}</span></div>
