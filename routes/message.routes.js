@@ -120,6 +120,10 @@ router.get('/find/:id', auth, async (req, res) => {
             }
         ])
 
+        for (let i = 0; i < docs.length; i++) {
+            docs[i].msg.reverse()
+        }
+
         res.json(docs)
 
     } catch (e) {
