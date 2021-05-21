@@ -45,7 +45,7 @@ const Chat = () => {
     return (
         <div className="chat">
             { dialogs[activeDialog].deleted &&
-                <div className="date"><span>THIS CHAT IS DELETED YOU CANT SEND MESSAGES</span></div>
+                <div className="date"><span>{dialogs[activeDialog].name} DELETED THIS CHAT - YOU CAN'T SEND MESSAGES</span></div>
             }
             {
                 newMessages && newMessages.map((obj, i) => {

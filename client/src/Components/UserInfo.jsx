@@ -86,29 +86,31 @@ const UserInfo = () => {
                                     <Image cloudName="artemijss"
                                            publicId={photo ? photo : "tkixqcinuntqmalr2dej"}/>
                                 </div>
-                                <div className="name">{name}</div>
-                                <div
-                                    className="status">{status ? "online" : "offline"}</div>
+                                <div className="name" style={activeDialog ? dialogs[activeDialog].deleted && {color: "rgb(214,48,46)"} : {}}>{name}</div>
+                                <div className="status" style={activeDialog ? dialogs[activeDialog].deleted && {color: "rgb(214,48,46)"} : {}}>
+                                    { activeDialog && dialogs[activeDialog].deleted
+                                        ?
+                                        "DELETED"
+                                        :
+                                        status ? "online" : "offline"
+                                    }
+                                </div>
                             </div>
                             { infoAboutUser.id &&
                                 <div onClick={() => {createNewDialog()}} className="button" style={{marginBottom: "28px"}}>
-                                    <svg className="salat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                         width="24" height="24">
-                                        <path fill="currentColor"
-                                              d="M6 18c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V6H6v12zM19 3h-3.5l-1-1h-5l-1 1H5v2h14V3z"/>
-                                    </svg>
+                                    <svg className="salat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M9 17.2l-4-4-1.4 1.3L9 19.9 20.4 8.5 19 7.1 9 17.2z"/></svg>
                                     <div className="flex1 paddingLeft20 salat bold">Add to friends</div>
                                 </div>
                             }
-                            <div className="about">
+                            <div style={activeDialog ? dialogs[activeDialog].deleted && {display: "none"} : {}} className="about">
                                 <span>Telephone</span>
                                 <div>{telephone}</div>
                             </div>
-                            <div className="about">
+                            <div style={activeDialog ? dialogs[activeDialog].deleted && {display: "none"} : {}} className="about">
                                 <span>Email</span>
                                 <div>{email}</div>
                             </div>
-                            <div className="about">
+                            <div style={activeDialog ? dialogs[activeDialog].deleted && {display: "none"} : {}} className="about">
                                 <span>About</span>
                                 <div>{about ? about : "none"}</div>
                             </div>

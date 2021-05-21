@@ -44,7 +44,7 @@ const Dialogs = () => {
                             <Image cloudName="artemijss" publicId={obj.photo ? obj.photo : "tkixqcinuntqmalr2dej"}/>
                             <div className="details">
                                 <div className="dialog-info1">
-                                    <div className={`dialog-name big-text ${obj.dialog.last_message_owner !== userData.userId && !obj.dialog.last_message_status ? "bold" : ""}`}>
+                                    <div style={obj.deleted && {color: "rgb(214,48,46)"}} className={`dialog-name big-text ${obj.dialog.last_message_owner !== userData.userId && !obj.dialog.last_message_status ? "bold" : ""}`}>
                                         {obj.name}
                                     </div>
                                     <div className={`mssg-time ${obj.dialog.last_message_owner !== userData.userId && !obj.dialog.last_message_status ? "black bold" : ""}`}>

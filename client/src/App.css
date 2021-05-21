@@ -540,6 +540,7 @@ button:hover {
 
 .chat .date {
   text-align: center;
+  text-transform: uppercase;
   padding: 20px 0;
   font-size: 13px;
   position: -webkit-sticky;

@@ -101,6 +101,24 @@ const dialog = (state = initialState, action) => {
                 dialogs: obj,
                 dialogsOrder: arr
             }
+        case 'DIALOG_DELETE_INFO':
+            return {
+                ...state,
+                dialogs: {
+                    ...state.dialogs,
+                    [action.payload]: {
+                        ...state.dialogs[action.payload],
+                        name: action.name,
+                        photo: 'DR7pkQw8DqX4F8FmUIHw_a5YEzo0gP3nHOptm6apiyzg_xEs_VcyQq9pQEH6FdY0wOl95xh8_hkepcq',
+                        id: '',
+                        status: false,
+                        description: 'Recipient deleted this chat',
+                        email: 'DELETED',
+                        telephone: 'DELETED',
+                        deleted: true
+                    }
+                }
+            }
         default:
             return state
     }

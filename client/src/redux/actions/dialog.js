@@ -86,6 +86,7 @@ export const dialogLastMessageStatusSet = (dialogId) => {
 export const deleteDialog = (dialogId, token, id = '') => {
     return dispatch => {
         return axios.post("/api/dialog/delete", {dialogId: dialogId, id: id},{ headers: { Authorization:`Bearer ${token}`}}).then(() => {
+            socket.emit('dialogDelete', dialogId, id)
             dispatch(activeDialogSet(''))
             dispatch(deleteDialogOne(dialogId))
         })
@@ -96,5 +97,13 @@ export const deleteDialogOne = (dialogId) => {
     return {
         type: 'DIALOG_DELETE_ONE',
         payload: dialogId
+    }
+}
+
+export const deleteDialogInfo = (dialogId, name) => {
+    return {
+        type: 'DIALOG_DELETE_INFO',
+        payload: dialogId,
+        name: name
     }
 }

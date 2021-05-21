@@ -27,10 +27,9 @@ router.get('/find', auth, async (req, res) => {
         let order = []
         for (const obj of dialogs) {
             const userId = JSON.stringify(user.id);
-            let data
             if (obj.participant2_id && obj.participant1_id) {
                 const p1 = JSON.stringify(obj.participant1_id);
-                data = await User.findById(p1 === userId ? obj.participant2_id : obj.participant1_id)
+                const data = await User.findById(p1 === userId ? obj.participant2_id : obj.participant1_id)
                 order.push(obj.id)
                 answer[obj.id] = ({
                     dialog: {
@@ -42,10 +41,10 @@ router.get('/find', auth, async (req, res) => {
                         last_message_owner: obj.last_message_owner,
                         last_message_status: obj.last_message_status
                     },
-                    name: data.name, photo: '', id: data.id, status: data.status, description: data.description, email: data.email, telephone: data.telephone
+                    name: data.name, photo: data.photo, id: data.id, status: data.status, description: data.description, email: data.email, telephone: data.telephone
                 })
             } else {
-                data = await User.findById(req.user.userId)
+                const user2 = await User.findOne(dialogs.ex_id)
                 order.push(obj.id)
                 answer[obj.id] = ({
                     dialog: {
@@ -57,7 +56,7 @@ router.get('/find', auth, async (req, res) => {
                         last_message_owner: obj.last_message_owner,
                         last_message_status: obj.last_message_status
                     },
-                    name: 'DELETED', photo: '', id: data.id, status: false, description: 'Recipient deleted this chat', email: 'DELETED', telephone: 'DELETED', deleted: true
+                    name: user2.name, photo: 'DR7pkQw8DqX4F8FmUIHw_a5YEzo0gP3nHOptm6apiyzg_xEs_VcyQq9pQEH6FdY0wOl95xh8_hkepcq', id: '', status: false, description: 'Recipient deleted this chat', email: 'DELETED', telephone: 'DELETED', deleted: true
                 })
             }
         }
@@ -145,7 +144,7 @@ router.post('/delete', auth, async (req, res) => {
         if (dialog.participant1_id && dialog.participant2_id) {
             const user2 = await User.findById(req.body.id)
             user.friends.splice(user.friends.indexOf(user2.id), 1)
-            user.dialogs.splice(user.friends.indexOf(dialogId), 1)
+            user.dialogs.splice(user.dialogs.indexOf(dialogId), 1)
             user2.friends.splice(user.friends.indexOf(user.id), 1)
             dialog.ex_id = user2.id
             if (JSON.stringify(dialog.participant1_id) === JSON.stringify(user.id)) {
@@ -161,10 +160,10 @@ router.post('/delete', auth, async (req, res) => {
         }
 
         user.friends.splice(user.friends.indexOf(dialog.ex_id), 1)
-        user.dialogs.splice(user.friends.indexOf(dialogId), 1)
+        user.dialogs.splice(user.dialogs.indexOf(dialog.id), 1)
 
         await Message.deleteMany({dialogId: dialogId})
-
+        await user.save()
         await Dialog.deleteOne({_id: dialogId})
 
         res.status(200).json({status: "OK"})

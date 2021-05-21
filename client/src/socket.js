@@ -1,6 +1,13 @@
 import { io } from "socket.io-client"
 import store from "./redux/store"
-import {dialogLastMessageSet, dialogOrderChange, dialogUserOnlineStatusSet, dialogNewSet, dialogLastMessageStatusSet} from "./redux/actions/dialog"
+import {
+    dialogLastMessageSet,
+    dialogOrderChange,
+    dialogUserOnlineStatusSet,
+    dialogNewSet,
+    dialogLastMessageStatusSet,
+    deleteDialogInfo
+} from "./redux/actions/dialog"
 import {messagesNewIdSet, messagesNewSet, messagesNewStatusSet, messagesStatusSet} from "./redux/actions/message";
 
 const socket = io()
@@ -39,6 +46,10 @@ socket.on('messageAllStatus', (messages) => {
 
 socket.on('newMessageId', (id) => {
     store.dispatch(messagesNewIdSet(id))
+})
+
+socket.on('dialogDelete', (dialogId, name) => {
+    store.dispatch(deleteDialogInfo(dialogId, name))
 })
 
 export default socket;

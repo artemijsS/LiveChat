@@ -36,7 +36,8 @@ function MainPage () {
         setActiveFindNewDialog(false)
         dispatch(messageNewDelete())
         if (activeDialog) {
-            socket.emit('messageAllStatus', {dialogId: activeDialog, id: userId})
+            if (!dialogs[activeDialog].deleted)
+                socket.emit('messageAllStatus', {dialogId: activeDialog, id: userId})
             if (dialogs[activeDialog].dialog.last_message_owner !== userId)
                 dispatch(dialogLastMessageStatusSet(activeDialog))
         }
@@ -208,11 +209,16 @@ function MainPage () {
                                         <Image onClick={() => userInfoShow()} cloudName="artemijss" publicId={dialogs[activeDialog].photo ? dialogs[activeDialog].photo : "tkixqcinuntqmalr2dej"} crop="scale"/>
                                     </div>
                                     <div onClick={() => userInfoShow()} className="dialog-info">
-                                        <div className="dialog-name">
+                                        <div className={dialogs[activeDialog].deleted ? "dialog-name red" : "dialog-name"}>
                                             {dialogs[activeDialog].name}
                                         </div>
-                                        <div className="last-time-seen">
-                                            {dialogs[activeDialog].status ? "online" : "offline"}
+                                        <div className="last-time-seen" style={dialogs[activeDialog].deleted && {color: "rgb(214,48,46)"}}>
+                                            { dialogs[activeDialog].deleted
+                                                ?
+                                                    "DELETED"
+                                                :
+                                                dialogs[activeDialog].status ? "online" : "offline"
+                                            }
                                         </div>
                                     </div>
                                     <div className="settings">
