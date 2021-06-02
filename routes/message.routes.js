@@ -87,9 +87,10 @@ router.get('/find/:id', auth, async (req, res) => {
             },
             {
                 $project: {
-                    created_at: {
-                        $dateToString: { format:"%d/%m/%Y", date:"$created_at" }
-                    },
+                    created_at: 1,
+                    // created_at: {
+                    //     $dateToString: { format:"%d/%m/%Y", date:"$created_at" }
+                    // },
                     text:1,
                     owner:1,
                     recipient:1,
@@ -100,7 +101,14 @@ router.get('/find/:id', auth, async (req, res) => {
             },
             {
                 $group: {
-                    _id: {created_at:"$created_at"},
+                    _id: {
+                        $add: [
+                            { $dayOfYear: "$created_at"},
+                            { $multiply:
+                                    [400, {$year: "$created_at"}]
+                            }
+                        ]
+                    },
                     msg: {
                         $push: {
                             text: '$text',
@@ -115,7 +123,7 @@ router.get('/find/:id', auth, async (req, res) => {
             },
             {
                 $sort: {
-                    "_id.created_at":-1
+                    "_id":-1
                 }
             }
         ])

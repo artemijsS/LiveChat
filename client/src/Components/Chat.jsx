@@ -84,7 +84,7 @@ const Chat = () => {
                             <div key={msg.id}>
                                 {
                                     j === obj.msg.length-1 &&
-                                    <div className="date"><span>{today === msg.time.split(' ')[0] ? "TODAY" : msg.time.split(' ')[0] === yesterday ? "YESTERDAY" : obj._id.created_at}</span></div>
+                                    <div className="date"><span>{today === msg.time.split(' ')[0] ? "TODAY" : msg.time.split(' ')[0] === yesterday ? "YESTERDAY" : msg.time.split(' ')[0]}</span></div>
                                 }
                                 <div className={`message-block ${userId === msg.owner ? "message-out" : "message-in"}`} key={j+msg.id}>
                                      <div className="message">
