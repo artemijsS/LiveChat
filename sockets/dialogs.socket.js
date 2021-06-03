@@ -42,29 +42,25 @@ module.exports = (socket,io) => {
     socket.on('dialogDelete', (dialogId, id) => {
         if (id) {
             console.log('na4alo - ',online.dialogs[dialogId])
-            findUser(id).then((user) => {
-                if (online.dialogs[dialogId].length > 1) {
-                    let remove = []
-                    for (let i = 0; i < online.dialogs[dialogId].length; i++) {
-                        const socketId = online.dialogs[dialogId][i]
-                        if (online.users[socketId] === id) {
-                            io.to(socketId).emit('dialogDelete', dialogId, user.name)
-                            remove.push(i)
+            findDialog(dialogId).then((dialog) => {
+                findUser(dialog.ex_id).then((user) => {
+                    if (online.dialogs[dialogId].length > 1) {
+                        let remove = []
+                        for (let i = 0; i < online.dialogs[dialogId].length; i++) {
+                            const socketId = online.dialogs[dialogId][i]
+                            if (online.users[socketId] === id) {
+                                io.to(socketId).emit('dialogDelete', dialogId, user.name)
+                                remove.push(i)
+                            }
                         }
+                        console.log(remove)
+                        for (let i = remove.length - 1; i >= 0; i--)
+                            online.dialogs[dialogId].splice(remove[i], 1);
+                        console.log('konec - ',online.dialogs[dialogId])
+                    } else {
+                        delete online.dialogs[dialogId]
                     }
-                    console.log(remove)
-                    for (let i = remove.length - 1; i >= 0; i--)
-                        online.dialogs[dialogId].splice(remove[i], 1);
-                    // online.dialogs[dialogId].map(socketId => {
-                    //     if (online.users[socketId] === id) {
-                    //         io.to(socketId).emit('dialogDelete', dialogId, user.name)
-                    //         online.dialogs[dialogId].splice(online.dialogs[dialogId].indexOf(socketId), 1)
-                    //     }
-                    // })
-                    console.log('konec - ',online.dialogs[dialogId])
-                } else {
-                    delete online.dialogs[dialogId]
-                }
+                })
             })
         }
     })

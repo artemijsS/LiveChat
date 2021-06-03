@@ -44,7 +44,7 @@ router.get('/find', auth, async (req, res) => {
                     name: data.name, photo: data.photo, id: data.id, status: data.status, description: data.description, email: data.email, telephone: data.telephone
                 })
             } else {
-                const user2 = await User.findOne(dialogs.ex_id)
+                const user2 = await User.findOne(obj.ex_id)
                 order.push(obj.id)
                 answer[obj.id] = ({
                     dialog: {
@@ -146,7 +146,7 @@ router.post('/delete', auth, async (req, res) => {
             user.friends.splice(user.friends.indexOf(user2.id), 1)
             user.dialogs.splice(user.dialogs.indexOf(dialogId), 1)
             user2.friends.splice(user.friends.indexOf(user.id), 1)
-            dialog.ex_id = user2.id
+            dialog.ex_id = user.id
             if (JSON.stringify(dialog.participant1_id) === JSON.stringify(user.id)) {
                 dialog.participant1_id = null
             } else {

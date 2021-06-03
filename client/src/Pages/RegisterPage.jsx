@@ -56,7 +56,7 @@ function RegisterPage () {
                         <div className="text_field">
                             <input type="tel" id="name" name="name" required onChange={changeHandler}/>
                             <span/>
-                            <label htmlFor="name">Name</label>
+                            <label htmlFor="name">Name Surname</label>
                         </div>
                         <div className="text_field">
                             <input type="email" id="email" name="email" required onChange={changeHandler}/>
