@@ -4,6 +4,12 @@ import socket from "../../socket";
 
 export const userDataFetch = (obj, path) => {
     return dispatch => {
+        let language = localStorage.language;
+        if (!language) {
+            dispatch(changeUserLanguage("EN"))
+        } else {
+            dispatch(changeUserLanguage(language))
+        }
         return fetch(`/api/auth/${path}`, {
             method: "POST",
             headers: {
@@ -18,11 +24,9 @@ export const userDataFetch = (obj, path) => {
                     return data.message
                 } else {
                     localStorage.setItem("token", data.token)
-                    let lan
+                    localStorage.setItem("language", data.language)
                     if (data.language) {
-                        lan = data.language
-                    } else {
-                        lan = "EN"
+                        language = data.language
                     }
                     const user = {
                         name: data.name,
@@ -33,7 +37,7 @@ export const userDataFetch = (obj, path) => {
                         role: data.role,
                         description: data.description,
                         photo: data.photo,
-                        language: lan
+                        language: language
                     }
                     dispatch(loginUser(user))
                     dispatch(setUserLoading(true))
@@ -47,6 +51,12 @@ export const userDataFetch = (obj, path) => {
 export const getProfileFetch = () => {
     return dispatch => {
         const token = localStorage.token;
+        let language = localStorage.language;
+        if (!language) {
+            dispatch(changeUserLanguage("EN"))
+        } else {
+            dispatch(changeUserLanguage(language))
+        }
         dispatch(setUserLoading(true));
         if (token) {
             return fetch("/api/auth/check", {
@@ -64,11 +74,8 @@ export const getProfileFetch = () => {
                         localStorage.removeItem("token")
                         dispatch(setUserLoading(false))
                     } else {
-                        let lan
                         if (data.language) {
-                            lan = data.language
-                        } else {
-                            lan = "EN"
+                            language = data.language
                         }
                         const user = {
                             name: data.name,
@@ -79,7 +86,7 @@ export const getProfileFetch = () => {
                             role: data.role,
                             description: data.description,
                             photo: data.photo,
-                            language: lan
+                            language: language
                         }
                         dispatch(loginUser(user))
                         socket.emit('userOnline', user.userId)

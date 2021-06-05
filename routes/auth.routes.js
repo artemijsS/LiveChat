@@ -22,10 +22,19 @@ router.post('/register',
         try {
             const errors = validationResult(req);
 
+            const language = req.body.language
+            let msg
+            if (language === "LV")
+                msg = "Ir ievadīte nepareizi dati"
+            else if (language === "RU")
+                msg = "Введены неправильные данные"
+            else
+                msg = "Incorrect data on login"
+
             if (!errors.isEmpty()) {
                 return res.status(400).json({
                     errors: errors.array(),
-                    message: "Incorrect data on registration"
+                    message: msg
                 })
             }
 
@@ -33,13 +42,27 @@ router.post('/register',
 
             // E-mail check
             let candidate = await User.findOne({ email })
-            if (candidate)
-                return res.status(400).json({ message: "User with this email is already registered" })
+            if (candidate) {
+                if (language === "LV")
+                    msg = "Lietotājs ar šo e-pastu jau ir reģistrēts"
+                else if (language === "RU")
+                    msg = "Пользователь с этой почтой уже зарегистрирован"
+                else
+                    msg = "User with this email is already registered"
+                return res.status(400).json({message: msg})
+            }
 
             // Telephone check
             candidate = await User.findOne({ telephone })
-            if (candidate)
-                return res.status(400).json({ message: "User with this telephone is already registered" })
+            if (candidate) {
+                if (language === "LV")
+                    msg = "Lietotājs ar šo telefonu jau ir reģistrēts"
+                else if (language === "RU")
+                    msg = "Пользователь с этим телефоном уже зарегистрирован"
+                else
+                    msg = "User with this telephone is already registered"
+                return res.status(400).json({message: msg})
+            }
 
             const hashedPass = await bcrypt.hash(password, 12)
             const user = new User({
@@ -78,10 +101,19 @@ router.post('/login',
         try {
             const errors = validationResult(req)
 
+            const language = req.body.language
+            let msg
+            if (language === "LV")
+                msg = "Ir ievadīte nepareizi dati"
+            else if (language === "RU")
+                msg = "Введены неправильные данные"
+            else
+                msg = "Incorrect data on login"
+
             if (!errors.isEmpty()) {
                 return res.status(400).json({
                     errors: errors.array(),
-                    message: "Incorrect data on login"
+                    message: msg
                 })
             }
 
@@ -89,13 +121,20 @@ router.post('/login',
 
             const user = await User.findOne({ email })
 
-            if (!user)
-                return res.status(400).json({ message: "User not found" })
+            if (!user) {
+                if (language === "LV")
+                    msg = "Lietotājs nav atrasts"
+                else if (language === "RU")
+                    msg = "Пользователь не найден"
+                else
+                    msg = "User not found"
+                return res.status(400).json({ message: msg })
+            }
 
             const isMatch = await bcrypt.compare(password, user.password)
 
             if (!isMatch)
-                return res.status(400).json({ message: "Incorrect data on login"})
+                return res.status(400).json({ message: msg})
 
             user.status = true
             await user.save()
