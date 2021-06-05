@@ -21,6 +21,7 @@ const user = (state = initialState, action) => {
         case 'USER_LOGOUT':
             socket.emit('logout')
             const language = state.userData.language
+            localStorage.setItem("language", language)
             return {
                 ...state,
                 userData: {
@@ -57,7 +58,6 @@ const user = (state = initialState, action) => {
                 infoAboutUser: action.payload
             }
         case 'LANGUAGE_CHANGE':
-            localStorage.removeItem("language")
             localStorage.setItem("language", action.payload)
             return {
                 ...state,
