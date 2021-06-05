@@ -18,6 +18,8 @@ function RegisterPage () {
         telephone: '', name: '', email: '', password: ''
     })
 
+    const [confirmPass, setConfirmPass] = useState('');
+
     const changeHandler = event => {
         setForm({ ...form, [event.target.name]: event.target.value })
     }
@@ -25,6 +27,11 @@ function RegisterPage () {
     const submit = event => {
         event.preventDefault()
         setLoading(true)
+        console.log(confirmPass)
+        if (confirmPass !== form.password) {
+            alert.show('Passwords not matched')
+            setLoading(false)
+        }
         dispatch(userDataFetch(form,'register')).then(res => {
             if (res) {
                 setLoading(false)
@@ -69,7 +76,7 @@ function RegisterPage () {
                             <label htmlFor="pass">Password</label>
                         </div>
                         <div className="text_field">
-                            <input type="password" id="confirm_password" name="password" minLength="6" required onChange={changeHandler}/>
+                            <input type="password" id="confirm_password" name="password" minLength="6" required onChange={(e) => {setConfirmPass(e.target.value)}}/>
                             <span/>
                             <label htmlFor="pass">Confirm Password</label>
                         </div>

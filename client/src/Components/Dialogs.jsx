@@ -36,7 +36,7 @@ const Dialogs = () => {
                     if (obj.dialog.last_message_time.split(' ')[0] === today) {
                         i = 1
                     } else if (obj.dialog.last_message_time.split(' ')[0] === yesterday) {
-                        obj.dialog.last_message_time = 'yesterday'
+                        obj.dialog.last_message_time = translate[userData.language].yesterday
                     }
 
                     return (
@@ -97,4 +97,25 @@ const getDate = (date_obj = new Date()) => {
     let year = date_obj.getFullYear();
 
     return  `${day}/${month}/${year}`;
+}
+
+const translate = {
+    LV: {
+        yesterday: "vakar",
+        ok: "OK",
+        cancel: "ATCELT",
+        error: "Kļūda"
+    },
+    RU: {
+        yesterday: "вчера",
+        ok: "OK",
+        cancel: "ОТМЕНА",
+        error: "Ошибка"
+    },
+    EN: {
+        yesterday: "yesterday",
+        ok: "OK",
+        cancel: "CANCEL",
+        error: "Error"
+    }
 }

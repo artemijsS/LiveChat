@@ -51,6 +51,14 @@ const user = (state = initialState, action) => {
                 ...state,
                 infoAboutUser: action.payload
             }
+        case 'LANGUAGE_CHANGE':
+            return {
+                ...state,
+                userData: {
+                    ...state.userData,
+                    language: action.payload
+                }
+            }
         default:
             return state
     }

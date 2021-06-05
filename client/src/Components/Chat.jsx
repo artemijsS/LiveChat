@@ -5,7 +5,7 @@ import axios from "axios";
 const Chat = () => {
 
     const {activeDialog, dialogs} = useSelector(({dialog}) => dialog)
-    const {token, userId} = useSelector(({user}) => user.userData)
+    const {token, userId, language} = useSelector(({user}) => user.userData)
     const {newMessages, status} = useSelector(({message}) => message)
 
     const [messages, setMessages] = useState([])
@@ -45,7 +45,7 @@ const Chat = () => {
     return (
         <div className="chat">
             { dialogs[activeDialog].deleted &&
-                <div className="date"><span>{dialogs[activeDialog].name} DELETED THIS CHAT - YOU CAN'T SEND MESSAGES</span></div>
+                <div className="date"><span>{dialogs[activeDialog].name} {translate[language].deletedNotification}</span></div>
             }
             {
                 newMessages && newMessages.map((obj, i) => {
@@ -84,7 +84,7 @@ const Chat = () => {
                             <div key={msg.id}>
                                 {
                                     j === obj.msg.length-1 &&
-                                    <div className="date"><span>{today === msg.time.split(' ')[0] ? "TODAY" : msg.time.split(' ')[0] === yesterday ? "YESTERDAY" : msg.time.split(' ')[0]}</span></div>
+                                    <div className="date"><span>{today === msg.time.split(' ')[0] ? translate[language].today : msg.time.split(' ')[0] === yesterday ? translate[language].yesterday : msg.time.split(' ')[0]}</span></div>
                                 }
                                 <div className={`message-block ${userId === msg.owner ? "message-out" : "message-in"}`} key={j+msg.id}>
                                      <div className="message">
@@ -131,4 +131,31 @@ const getDate = (date_obj = new Date()) => {
     let year = date_obj.getFullYear();
 
     return  `${day}/${month}/${year}`;
+}
+
+const translate = {
+    LV: {
+        deletedNotification: "IZDZĒSA ŠO TĒRZĒŠANU - JŪS NEVARAT SŪTIT ZIŅOJUMUS",
+        today: "ŠODIEN",
+        yesterday: "VAKAR",
+        ok: "OK",
+        cancel: "ATCELT",
+        error: "Kļūda"
+    },
+    RU: {
+        deletedNotification: "УДАЛИЛ ЭТОТ ЧАТ - ВЫ НЕ МОЖЕТЕ ОТПРАВЛЯТЬ СООБЩЕНИЯ",
+        today: "СЕГОДНЯ",
+        yesterday: "ВЧЕРА",
+        ok: "OK",
+        cancel: "ОТМЕНА",
+        error: "Ошибка"
+    },
+    EN: {
+        deletedNotification: "DELETED THIS CHAT - YOU CAN'T SEND MESSAGES",
+        today: "TODAY",
+        yesterday: "YESTERDAY",
+        ok: "OK",
+        cancel: "CANCEL",
+        error: "Error"
+    }
 }

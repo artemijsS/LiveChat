@@ -95,11 +95,36 @@ router.post('/updateImage', auth, async (req, res) => {
         const user = await User.findById(id)
         const fileStr = req.body.img
         const uploadResponse = await cloudinary.uploader.upload(fileStr)
-        await cloudinary.uploader.destroy(user.photo)
+        if (user.photo) {
+            await cloudinary.uploader.destroy(user.photo)
+        }
         user.photo = uploadResponse.public_id
         await user.save()
 
         res.json({ photo: user.photo })
+
+    } catch (e) {
+        res.status(500).json({ message: "Error" })
+    }
+
+})
+
+// api/user/updateLanguage
+router.post('/updateLanguage', auth, async (req, res) => {
+
+    try {
+
+        const id = req.user.userId
+        const language = req.body.language
+        if (language !== "LV" && language !== "RU" && language !== "EN") {
+            res.status(500).json({ message: "This language is not supported" })
+            return
+        }
+        const user = await User.findById(id)
+        user.language = language
+        await user.save()
+
+        res.json({ language })
 
     } catch (e) {
         res.status(500).json({ message: "Error" })

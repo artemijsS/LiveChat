@@ -10,7 +10,7 @@ const Profile = () => {
 
     const dispatch = useDispatch()
 
-    const {name, description, token, photo} = useSelector(({user}) => user.userData)
+    const {name, description, token, photo, telephone, language} = useSelector(({user}) => user.userData)
 
     const [inputName, setInputName] = useState(true)
     const [inputAbout, setInputAbout] = useState(true)
@@ -28,9 +28,9 @@ const Profile = () => {
         if (nameInput !== name) {
             axios.post('/api/user/updateName', {name: nameInput}, { headers: { Authorization: `Bearer ${token}` }}).then((res) => {
                 dispatch(updateName(res.data.name))
-                alert.success('Name was changed')
+                alert.success(translate[language].nameWasChanged)
             }, () => {
-                alert.show('Name can not be empty')
+                alert.show(translate[language].namCanNotBeEmpty)
                 const inName = document.getElementById('nameInput')
                 inName.value = name
             })
@@ -42,9 +42,9 @@ const Profile = () => {
         if (aboutInput !== description) {
             axios.post('/api/user/updateAbout', {about: aboutInput}, { headers: { Authorization: `Bearer ${token}` }}).then((res) => {
                 dispatch(updateAbout(res.data.about))
-                alert.success('About was changed')
+                alert.success(translate[language].aboutWasChanged)
             }, () => {
-                alert.show('Error')
+                alert.show(translate[language].error)
                 const inAbout = document.getElementById('aboutInput')
                 inAbout.value = description
             })
@@ -67,9 +67,10 @@ const Profile = () => {
     const uploadImage = async (base64EncodedImage) => {
         axios.post('/api/user/updateImage', {img: base64EncodedImage}, { headers: { Authorization: `Bearer ${token}` }}).then((res) => {
             dispatch(updatePhoto(res.data.photo))
+            alert.success(translate[language].photoWasChanged)
             setLoadingPhoto(false)
         }, () => {
-            alert.show('error')
+            alert.show(translate[language].error)
             setLoadingPhoto(false)
         })
     };
@@ -79,7 +80,7 @@ const Profile = () => {
             <div className="image">
                 <input ref={imageInput} onChange={changeImage} style={{display: "none"}} type="file" accept="image/*"/>
                 <div className="changePhoto">
-                    Change photo
+                    {translate[language].changePhoto}
                 </div>
 
                 <Image onClick={() => imageInput.current.click()} cloudName="artemijss" publicId={photo ? photo : "tkixqcinuntqmalr2dej"}/>
@@ -90,7 +91,7 @@ const Profile = () => {
                 }
             </div>
             <div className="name">
-                <span>Name</span>
+                <span>{translate[language].name}</span>
                 <div className={inputName ? "update" : " update borderBottom"}>
                     <input id="nameInput" onChange={(e) => {setNameInput(e.target.value)}} type="text" defaultValue={name} readOnly={inputName}/>
                     { inputName
@@ -107,9 +108,9 @@ const Profile = () => {
             </div>
             <div className="info"/>
             <div className="about">
-                <span>About</span>
+                <span>{translate[language].about}</span>
                 <div className={inputAbout ? "update" : " update borderBottom"}>
-                    <input id="aboutInput" onChange={(e) => {setAboutInput(e.target.value)}} type="text" defaultValue={description} placeholder={"enter about yourself"} readOnly={inputAbout}/>
+                    <input id="aboutInput" onChange={(e) => {setAboutInput(e.target.value)}} type="text" defaultValue={description} placeholder={translate[language].aboutPlaceholder} readOnly={inputAbout}/>
                     { inputAbout
                         ?
                         <div onClick={() => {setInputAbout(false)}}>
@@ -122,8 +123,60 @@ const Profile = () => {
                     }
                 </div>
             </div>
+            <div className="info"/>
+            <div className="about">
+                <span>{translate[language].telephone}</span>
+                <div className="update">
+                    <div id="tel" style={{fontSize:"18px"}}>{telephone}</div>
+                </div>
+            </div>
         </div>
     )
 }
 
 export default Profile;
+
+const translate = {
+    LV: {
+        aboutWasChanged: "Apraksts tika mainīts",
+        nameWasChanged: "Vārds/Uzvārds tika mainīts",
+        namCanNotBeEmpty: "Vārds nevar būt tukšs",
+        photoWasChanged: "Foto tika mainīts",
+        changePhoto: "Mainīt bildi",
+        name: "Vārds",
+        about: "Apraksts",
+        aboutPlaceholder: "ievadiet par sevi",
+        telephone: "Tālrunis",
+        ok: "OK",
+        cancel: "ATCELT",
+        error: "Kļūda"
+    },
+    RU: {
+        aboutWasChanged: "Описание было изменено",
+        nameWasChanged: "Имя/Фамилия была изменена",
+        namCanNotBeEmpty: "Имя не может быть пустым",
+        photoWasChanged: "Фотография была изменена",
+        changePhoto: "Изменить фотографию",
+        name: "Имя",
+        about: "Описание",
+        aboutPlaceholder: "введите о себе",
+        telephone: "Телефон",
+        ok: "OK",
+        cancel: "ОТМЕНА",
+        error: "Ошибка"
+    },
+    EN: {
+        aboutWasChanged: "Description was changed",
+        nameWasChanged: "Name/Surname was changed",
+        namCanNotBeEmpty: "Name cannot be empty",
+        photoWasChanged: "Photo was changed",
+        changePhoto: "Change photo",
+        name: "Name",
+        about: "About",
+        aboutPlaceholder: "enter about yourself",
+        telephone: "Telephone",
+        ok: "OK",
+        cancel: "CANCEL",
+        error: "Error"
+    }
+}

@@ -14,6 +14,7 @@ const UserInfo = () => {
 
     const {dialogs, activeDialog} = useSelector(({dialog}) => dialog)
     const {infoAboutUser, userData} = useSelector(({user}) => user)
+    const {token, language} = useSelector(({user}) => userData)
 
     const [name, setName] = useState('')
     const [photo, setPhoto] = useState('')
@@ -27,7 +28,7 @@ const UserInfo = () => {
     useEffect(() => {
         if (infoAboutUser.id) {
             setLoading(true)
-            axios.get(`/api/user/find/${infoAboutUser.id}`, { headers: { Authorization: `Bearer ${userData.token}` }}).then((res) => {
+            axios.get(`/api/user/find/${infoAboutUser.id}`, { headers: { Authorization: `Bearer ${token}` }}).then((res) => {
                 setName(res.data.name)
                 setStatus(res.data.status)
                 setPhoto(res.data.photo)
@@ -37,7 +38,7 @@ const UserInfo = () => {
                 setLoading(false)
             }, () => {
                 setLoading(false)
-                alert.show('error')
+                alert.show(translate[language].error)
             })
         } else {
             if (activeDialog) {
@@ -53,19 +54,19 @@ const UserInfo = () => {
     }, [infoAboutUser])
 
     const createNewDialog = () => {
-        dispatch(createDialog(userData.token, infoAboutUser.id)).then((res) => {
+        dispatch(createDialog(token, infoAboutUser.id)).then((res) => {
             if (res === -1)
-                alert.show('error')
+                alert.show(translate[language].error)
         })
         dispatch(infoAboutUserSet({bool: false, id: null}))
     }
 
     const deleteDialogFn = () => {
-        const res = window.confirm('Are you sure?')
+        const res = window.confirm(translate[language].sure)
         if (!res)
             return false
         dispatch(infoAboutUserSet({bool: false, id: null}))
-        dispatch(deleteDialog(activeDialog, userData.token, dialogs[activeDialog].id))
+        dispatch(deleteDialog(activeDialog, token, dialogs[activeDialog].id))
     }
 
     return (
@@ -76,7 +77,7 @@ const UserInfo = () => {
                         <path fill="currentColor"
                               d="M19.1 17.2l-5.3-5.3 5.3-5.3-1.8-1.8-5.3 5.4-5.3-5.3-1.8 1.7 5.3 5.3-5.3 5.3L6.7 19l5.3-5.3 5.3 5.3 1.8-1.8z"/>
                     </svg>
-                    <div className="title">Profile info</div>
+                    <div className="title">{translate[language].profileInfo}</div>
                 </div>
                 { !loading &&
                     <>
@@ -90,20 +91,20 @@ const UserInfo = () => {
                                 <div className="status" style={activeDialog ? dialogs[activeDialog].deleted && {color: "rgb(214,48,46)"} : {}}>
                                     { activeDialog && dialogs[activeDialog].deleted
                                         ?
-                                        "DELETED"
+                                        translate[language].deleted
                                         :
-                                        status ? "online" : "offline"
+                                        status ? translate[language].online : translate[language].offline
                                     }
                                 </div>
                             </div>
                             { infoAboutUser.id &&
                                 <div onClick={() => {createNewDialog()}} className="button" style={{marginBottom: "28px"}}>
                                     <svg className="salat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M9 17.2l-4-4-1.4 1.3L9 19.9 20.4 8.5 19 7.1 9 17.2z"/></svg>
-                                    <div className="flex1 paddingLeft20 salat bold">Add to friends</div>
+                                    <div className="flex1 paddingLeft20 salat bold">{translate[language].addToFriends}</div>
                                 </div>
                             }
                             <div style={activeDialog ? dialogs[activeDialog].deleted && {display: "none"} : {}} className="about">
-                                <span>Telephone</span>
+                                <span>{translate[language].telephone}</span>
                                 <div>{telephone}</div>
                             </div>
                             <div style={activeDialog ? dialogs[activeDialog].deleted && {display: "none"} : {}} className="about">
@@ -111,8 +112,8 @@ const UserInfo = () => {
                                 <div>{email}</div>
                             </div>
                             <div style={activeDialog ? dialogs[activeDialog].deleted && {display: "none"} : {}} className="about">
-                                <span>About</span>
-                                <div>{about ? about : "none"}</div>
+                                <span>{translate[language].about}</span>
+                                <div>{about ? about : translate[language].none}</div>
                             </div>
                             { !infoAboutUser.id &&
                                 <div onClick={deleteDialogFn} className="button">
@@ -121,7 +122,7 @@ const UserInfo = () => {
                                         <path fill="currentColor"
                                               d="M6 18c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V6H6v12zM19 3h-3.5l-1-1h-5l-1 1H5v2h14V3z"/>
                                     </svg>
-                                    <div className="flex1 paddingLeft20 red bold">Delete Chat</div>
+                                    <div className="flex1 paddingLeft20 red bold">{translate[language].deleteChat}</div>
                                 </div>
                             }
                         </div>
@@ -137,3 +138,54 @@ const UserInfo = () => {
 }
 
 export default UserInfo;
+
+const translate = {
+    LV: {
+        profileInfo: "Profila informācija",
+        addToFriends: "Pievienot draugiem",
+        deleteChat: "Dzēst tērzēšanu",
+        sure: "Vai jūs to tiešam gribat?",
+        name: "Vārds",
+        about: "Apraksts",
+        telephone: "Tālrunis",
+        deleted: "DZĒSTS",
+        online: "online",
+        offline: "offline",
+        ok: "OK",
+        cancel: "ATCELT",
+        error: "Kļūda",
+        none: "nav"
+    },
+    RU: {
+        profileInfo: "Информация о профиле",
+        addToFriends: "Добавить в друзья",
+        deleteChat: "Удалить Чат",
+        sure: "Вы уверены?",
+        name: "Имя",
+        about: "Описание",
+        telephone: "Телефон",
+        deleted: "УДАЛЕН",
+        online: "в сети",
+        offline: "не в сети",
+        ok: "OK",
+        cancel: "ОТМЕНА",
+        error: "Ошибка",
+        none: "пусто"
+    },
+    EN: {
+        profileInfo: "Profile Info",
+        addToFriends: "Add to friends",
+        deleteChat: "Delete Chat",
+        sure: "Are you sure?",
+        name: "Name",
+        about: "About",
+        telephone: "Telephone",
+        deleted: "DELETED",
+        online: "online",
+        offline: "offline",
+        ok: "OK",
+        cancel: "CANCEL",
+        error: "Error",
+        none: "none"
+    }
+}

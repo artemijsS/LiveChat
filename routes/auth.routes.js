@@ -59,7 +59,7 @@ router.post('/register',
                 { expiresIn: '2h' }
             );
 
-            res.json({ token, name: user.name, email: user.email, userId: user.id, telephone: user.telephone, role: user.role, description: '', photo: user.photo })
+            res.json({ token, name: user.name, email: user.email, userId: user.id, telephone: user.telephone, role: user.role, description: '', photo: user.photo, language: user.language })
 
         } catch (e) {
             res.status(500).json({ message: "Error" })
@@ -106,7 +106,7 @@ router.post('/login',
                 { expiresIn: '1h' }
             );
 
-            res.json({ token, name: user.name, email: user.email, userId: user.id, telephone: user.telephone, role: user.role, description: user.description, photo: user.photo })
+            res.json({ token, name: user.name, email: user.email, userId: user.id, telephone: user.telephone, role: user.role, description: user.description, photo: user.photo, language: user.language })
 
         } catch (e) {
             res.status(500).json({ message: "Error" })
@@ -131,7 +131,7 @@ router.get('/check', async (req, res) => {
             return res.status(401).json({message: 'No auth'})
         }
 
-        res.json({ name: user.name, email: user.email, userId: user.id, telephone: user.telephone, role: user.role, description: user.description, photo: user.photo })
+        res.json({ name: user.name, email: user.email, userId: user.id, telephone: user.telephone, role: user.role, description: user.description, photo: user.photo, language: user.language })
     } catch (e) {
         res.status(500).json({ message: "Error" })
     }

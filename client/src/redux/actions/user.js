@@ -18,6 +18,12 @@ export const userDataFetch = (obj, path) => {
                     return data.message
                 } else {
                     localStorage.setItem("token", data.token)
+                    let lan
+                    if (data.language) {
+                        lan = data.language
+                    } else {
+                        lan = "EN"
+                    }
                     const user = {
                         name: data.name,
                         email: data.email,
@@ -26,7 +32,8 @@ export const userDataFetch = (obj, path) => {
                         token: data.token,
                         role: data.role,
                         description: data.description,
-                        photo: data.photo
+                        photo: data.photo,
+                        language: lan
                     }
                     dispatch(loginUser(user))
                     dispatch(setUserLoading(true))
@@ -57,6 +64,12 @@ export const getProfileFetch = () => {
                         localStorage.removeItem("token")
                         dispatch(setUserLoading(false))
                     } else {
+                        let lan
+                        if (data.language) {
+                            lan = data.language
+                        } else {
+                            lan = "EN"
+                        }
                         const user = {
                             name: data.name,
                             email: data.email,
@@ -65,7 +78,8 @@ export const getProfileFetch = () => {
                             token: token,
                             role: data.role,
                             description: data.description,
-                            photo: data.photo
+                            photo: data.photo,
+                            language: lan
                         }
                         dispatch(loginUser(user))
                         socket.emit('userOnline', user.userId)
@@ -108,4 +122,9 @@ export const updatePhoto = img => ({
 export const infoAboutUserSet = obj => ({
     type: 'INFO_ABOUT_USER_SET',
     payload: obj
+})
+
+export const changeUserLanguage = lan => ({
+    type: 'LANGUAGE_CHANGE',
+    payload: lan
 })

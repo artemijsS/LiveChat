@@ -8,7 +8,7 @@ import socket from "../socket";
 import {messageNewDelete, messagesNewSet} from "../redux/actions/message";
 import {dialogLastMessageSet, dialogLastMessageStatusSet, dialogOrderChange} from "../redux/actions/dialog";
 import {Link} from 'react-router-dom'
-import {infoAboutUserSet, logoutUser} from "../redux/actions/user";
+import {changeUserLanguage, infoAboutUserSet, logoutUser} from "../redux/actions/user";
 import {Image} from "cloudinary-react";
 
 
@@ -17,14 +17,17 @@ function MainPage () {
     const dispatch = useDispatch()
 
     const {dialogs, activeDialog, dialogsOrder} = useSelector(({dialog}) => dialog)
-    const {token, userId, role, photo} = useSelector(({user}) => user.userData)
+    const {token, userId, role, photo, language} = useSelector(({user}) => user.userData)
     const {infoAboutUser} = useSelector(({user}) => user)
 
     const alert = useAlert()
 
     const [activeFindNewDialog, setActiveFindNewDialog] = useState(false)
     const [profile, setProfile] = useState(false)
+    const [languageChoose, setLanguageChoose] = useState(false)
     const [userInfo, setUserInfo] = useState(infoAboutUser.bool)
+
+    const [languageTMP, setLanguageTMP] = useState(language)
 
     const [messageText, setMessageText] = useState('')
     const [settingsPopUp, setSettingsPopUp] = useState(false)
@@ -120,12 +123,56 @@ function MainPage () {
         setUserInfo(true)
     }
 
+    const changeLanguage = () => {
+        console.log(languageTMP);
+        if (language === languageTMP)
+            return
+        axios.post("/api/user/updateLanguage", { language: languageTMP}, { headers: { Authorization: `Bearer ${token}` }}).then((res) => {
+            dispatch(changeUserLanguage(res.data.language))
+            alert.success(translate[languageTMP].languageBox.notification)
+            setLanguageChoose(false)
+        }, () => {
+            alert.show(translate[language].error)
+        })
+    }
+
     return (
         <div>
             <Helmet>
                 <title>Live Chat</title>
             </Helmet>
             <BackGround/>
+            { languageChoose &&
+                <div className="language">
+                    <div className="rel-block">
+                        <div className="box-choose">
+                            <div className="heading">{translate[language].languageBox.heading}</div>
+                            <div className="choose">
+                                <label>
+                                    <input name="lan" value="LV" onChange={(e) => {setLanguageTMP(e.target.value)}} type="radio" defaultChecked={language === "LV"}/>
+                                    LV
+                                </label>
+                                <label>
+                                    <input name="lan" value="RU" onChange={(e) => {setLanguageTMP(e.target.value)}} type="radio" defaultChecked={language === "RU"}/>
+                                    RU
+                                </label>
+                                <label>
+                                    <input name="lan" value="EN" onChange={(e) => {setLanguageTMP(e.target.value)}} type="radio" defaultChecked={language === "EN"}/>
+                                    EN
+                                </label>
+                            </div>
+                            <div className="bottom">
+                                <div className="ok" onClick={changeLanguage}>
+                                    {translate[language].ok}
+                                </div>
+                                <div className="cancel" onClick={() => {setLanguageChoose(false)}}>
+                                    {translate[language].cancel}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
             <div className="all-screen">
                 <div className="main-box">
                     <div className="whats-app">
@@ -138,7 +185,7 @@ function MainPage () {
                                                 <svg onClick={() => {setActiveFindNewDialog(false)}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 4l1.4 1.4L7.8 11H20v2H7.8l5.6 5.6L12 20l-8-8 8-8z"/></svg>
                                             </div>
                                             <div className="big-text">
-                                                New Chat
+                                                {translate[language].newChat}
                                             </div>
                                         </div>
                                     </div>
@@ -154,7 +201,7 @@ function MainPage () {
                                                 <svg onClick={() => {setProfile(false)}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 4l1.4 1.4L7.8 11H20v2H7.8l5.6 5.6L12 20l-8-8 8-8z"/></svg>
                                             </div>
                                             <div className="big-text">
-                                                Profile
+                                                {translate[language].profile}
                                             </div>
                                         </div>
                                     </div>
@@ -188,10 +235,10 @@ function MainPage () {
                                             {
                                                 settingsPopUp &&
                                                 <div className="settingsPopUp" ref={popUpRef}>
-                                                    <div className="settingsLink" onClick={() => {setProfile(true); setSettingsPopUp(false)}}><div>Profile</div></div>
-                                                    <div className="settingsLink" onClick={() => {}}><div>Favourites</div></div>
-                                                    <div className="settingsLink" onClick={() => {}}><div>Settings</div></div>
-                                                    <div className="settingsLink" onClick={() => {dispatch(logoutUser())}}><div>Logout</div></div>
+                                                    <div className="settingsLink" onClick={() => {setProfile(true); setSettingsPopUp(false)}}><div>{translate[language].profile}</div></div>
+                                                    <div className="settingsLink" onClick={() => {}}><div>DEV</div></div>
+                                                    <div className="settingsLink" onClick={() => {setLanguageChoose(true); setSettingsPopUp(false)}}><div>{translate[language].language}</div></div>
+                                                    <div className="settingsLink" onClick={() => {dispatch(logoutUser())}}><div>{translate[language].logout}</div></div>
                                                 </div>
                                             }
                                         </div>
@@ -218,9 +265,9 @@ function MainPage () {
                                         <div className="last-time-seen" style={dialogs[activeDialog].deleted && {color: "rgb(214,48,46)"}}>
                                             { dialogs[activeDialog].deleted
                                                 ?
-                                                    "DELETED"
+                                                    translate[language].deleted
                                                 :
-                                                dialogs[activeDialog].status ? "online" : "offline"
+                                                dialogs[activeDialog].status ? translate[language].online : translate[language].offline
                                             }
                                         </div>
                                     </div>
@@ -233,7 +280,7 @@ function MainPage () {
                                 <div className="footer">
                                     <div className="box">
                                         <form onSubmit={sendMessage} className="input-box">
-                                            <input onChange={e => setMessageText(e.target.value)} id="sendMessageInput" type="text" placeholder="Введите сообщение" disabled={dialogs[activeDialog].deleted} autoComplete="off"/>
+                                            <input onChange={e => setMessageText(e.target.value)} id="sendMessageInput" type="text" placeholder={translate[language].enterMessage} disabled={dialogs[activeDialog].deleted} autoComplete="off"/>
                                             <svg role="button" onClick={sendMessage} type="submit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"/></svg>
                                         </form>
                                     </div>
@@ -277,4 +324,58 @@ const getDate = () => {
     if (seconds < 10) seconds = '0' + seconds;
 
     return  `${day}/${month}/${year} ${hours}:${minutes} ${seconds}`;
+}
+
+const translate = {
+    LV: {
+        languageBox: {
+            notification: "Valoda it nomainīta",
+            heading: "Izvēlieties valodu"
+        },
+        newChat: "Jauna tērzēšana",
+        profile: "Profils",
+        language: "Valoda",
+        logout: "Iziet",
+        deleted: "DZĒSTS",
+        online: "online",
+        offline: "offline",
+        enterMessage: "Ievadiet ziņojumu",
+        ok: "OK",
+        cancel: "ATCELT",
+        error: "Kļūda"
+    },
+    RU: {
+        languageBox: {
+            notification: "Язык успешно поменян",
+            heading: "Выберите язык"
+        },
+        newChat: "Новый чат",
+        profile: "Профиль",
+        language: "Язык",
+        logout: "Выйти",
+        deleted: "УДАЛЕН",
+        online: "в сети",
+        offline: "не в сети",
+        enterMessage: "Введите сообщение",
+        ok: "OK",
+        cancel: "ОТМЕНА",
+        error: "Ошибка"
+    },
+    EN: {
+        languageBox: {
+            notification: "Language changed",
+            heading: "Select a language"
+        },
+        newChat: "New Chat",
+        profile: "Profile",
+        language: "Language",
+        logout: "Logout",
+        deleted: "DELETED",
+        online: "online",
+        offline: "offline",
+        enterMessage: "Enter a message",
+        ok: "OK",
+        cancel: "CANCEL",
+        error: "Error"
+    }
 }
