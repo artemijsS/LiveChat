@@ -119,6 +119,8 @@ function MainPage () {
     const userInfoShow = () => {
         if (infoAboutUser.id) {
             dispatch(infoAboutUserSet({bool: true, id: null}))
+        } else if (activeDialog) {
+            dispatch(infoAboutUserSet({bool: true, id: dialogs[activeDialog].id}))
         }
         setUserInfo(true)
     }
