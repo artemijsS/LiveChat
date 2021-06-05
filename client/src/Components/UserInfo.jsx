@@ -54,19 +54,24 @@ const UserInfo = () => {
     }, [infoAboutUser])
 
     const createNewDialog = () => {
+        setLoading(true)
         dispatch(createDialog(token, infoAboutUser.id)).then((res) => {
+            setLoading(false)
             if (res === -1)
                 alert.show(translate[language].error)
+            dispatch(infoAboutUserSet({bool: false, id: null}))
         })
-        dispatch(infoAboutUserSet({bool: false, id: null}))
     }
 
     const deleteDialogFn = () => {
         const res = window.confirm(translate[language].sure)
         if (!res)
             return false
-        dispatch(infoAboutUserSet({bool: false, id: null}))
-        dispatch(deleteDialog(activeDialog, token, dialogs[activeDialog].id))
+        setLoading(true)
+        dispatch(deleteDialog(infoAboutUser.dialogId, token, infoAboutUser.id)).then(() => {
+            setLoading(false)
+            dispatch(infoAboutUserSet({bool: false, id: null}))
+        })
     }
 
     return (
@@ -97,7 +102,7 @@ const UserInfo = () => {
                                     }
                                 </div>
                             </div>
-                            { infoAboutUser.id &&
+                            { !dialogs[infoAboutUser.dialogId] &&
                                 <div onClick={() => {createNewDialog()}} className="button" style={{marginBottom: "28px"}}>
                                     <svg className="salat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M9 17.2l-4-4-1.4 1.3L9 19.9 20.4 8.5 19 7.1 9 17.2z"/></svg>
                                     <div className="flex1 paddingLeft20 salat bold">{translate[language].addToFriends}</div>
@@ -115,7 +120,7 @@ const UserInfo = () => {
                                 <span>{translate[language].about}</span>
                                 <div>{about ? about : translate[language].none}</div>
                             </div>
-                            { !infoAboutUser.id &&
+                            { dialogs[infoAboutUser.dialogId] &&
                                 <div onClick={deleteDialogFn} className="button">
                                     <svg className="red" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                          width="24" height="24">

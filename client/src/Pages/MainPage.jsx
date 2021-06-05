@@ -117,16 +117,15 @@ function MainPage () {
     }
 
     const userInfoShow = () => {
-        if (infoAboutUser.id) {
-            dispatch(infoAboutUserSet({bool: true, id: null}))
-        } else if (activeDialog) {
-            dispatch(infoAboutUserSet({bool: true, id: dialogs[activeDialog].id}))
-        }
+        // if (infoAboutUser.id) {
+        //     dispatch(infoAboutUserSet({bool: true, id: null}))
+        // } else if (activeDialog) {
+            dispatch(infoAboutUserSet({bool: true, id: dialogs[activeDialog].id, dialogId: activeDialog}))
+        // }
         setUserInfo(true)
     }
 
     const changeLanguage = () => {
-        console.log(languageTMP);
         if (language === languageTMP)
             return
         axios.post("/api/user/updateLanguage", { language: languageTMP}, { headers: { Authorization: `Bearer ${token}` }}).then((res) => {

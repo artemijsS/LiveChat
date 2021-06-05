@@ -5,7 +5,8 @@ const initialState = {
     loading: false,
     infoAboutUser: {
         bool: false,
-        id: null
+        id: null,
+        dialogId: null
     }
 }
 
