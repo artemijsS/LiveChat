@@ -135,3 +135,8 @@ export const changeUserLanguage = lan => ({
     type: 'LANGUAGE_CHANGE',
     payload: lan
 })
+
+export const dialogsSearch = tel => ({
+    type: 'DIALOG_SEARCH',
+    payload: tel
+})

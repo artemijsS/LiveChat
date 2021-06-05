@@ -449,6 +449,7 @@ button:hover {
   /*display: flex;*/
   /*flex-wrap: nowrap;*/
   /*flex-direction: column;*/
+  position: relative;
   max-height: calc(100vh - 150px);
   min-height: calc(510px - 110px);
   overflow-y: auto;
@@ -774,7 +775,7 @@ button:hover {
   background-color: white;
   padding-right: 30px;
 }
-.userInfo .loadingChatBlock {
+.userInfo .loadingChatBlock, .dialogs .loadingChatBlock {
   position: absolute;
   left: 50%;
   margin-left: -50px;

@@ -67,6 +67,62 @@ router.get('/find', auth, async (req, res) => {
 
 })
 
+// api/dialog/search
+router.post('/search', auth, async (req, res) => {
+
+    try {
+        const userId = req.user.userId
+
+        const user = await User.findById(userId)
+        const telephone = req.body.search
+
+        if (!telephone) {
+            return res.status(500).json({message: "No search element"})
+        }
+
+        if (!user) {
+            return res.status(401).json({message: "No Auth"})
+        }
+        console.log(telephone)
+        const dialogsAr = user.dialogs
+
+        const dialogs = await Dialog.find({'_id': { $in: dialogsAr }}).sort({last_message_created_at: -1})
+
+        let answer = {}
+        for (const obj of dialogs) {
+            const userId = JSON.stringify(user.id);
+            if (obj.participant2_id && obj.participant1_id) {
+                const p1 = JSON.stringify(obj.participant1_id);
+                const data = await User.findById(p1 === userId ? obj.participant2_id : obj.participant1_id)
+                if (data.telephone.includes(telephone)) {
+                    answer[obj.id] = ({
+                        dialog: {
+                            id: obj.id,
+                            participant1_id: obj.participant1_id,
+                            participant2_id: obj.participant2_id,
+                            last_message: obj.last_message,
+                            last_message_time: obj.last_message_time,
+                            last_message_owner: obj.last_message_owner,
+                            last_message_status: obj.last_message_status
+                        },
+                        name: data.name,
+                        photo: data.photo,
+                        id: data.id,
+                        status: data.status,
+                        description: data.description,
+                        email: data.email,
+                        telephone: data.telephone
+                    })
+                }
+            }
+        }
+        res.json({answer});
+    } catch (e) {
+        res.status(500).json({ message: "Error" })
+    }
+
+})
+
 // api/dialog/new
 router.post('/new', auth, async (req, res) => {
 

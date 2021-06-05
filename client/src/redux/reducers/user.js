@@ -7,7 +7,8 @@ const initialState = {
         bool: false,
         id: null,
         dialogId: null
-    }
+    },
+    dialogSearch: null
 }
 
 const user = (state = initialState, action) => {
@@ -64,6 +65,11 @@ const user = (state = initialState, action) => {
                     ...state.userData,
                     language: action.payload
                 }
+            }
+        case 'DIALOG_SEARCH':
+            return {
+                ...state,
+                dialogSearch: action.payload
             }
         default:
             return state

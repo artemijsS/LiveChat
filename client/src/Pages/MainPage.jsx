@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import { Helmet } from 'react-helmet';
-import {BackGround, Chat, Dialogs, FindNewDialog, Profile, Search, UserInfo} from "../Components";
+import {BackGround, Chat, Dialogs, FindNewDialog, Profile, Search, UserInfo, DialogsSearch} from "../Components";
 import axios from "axios";
 import {useAlert} from "react-alert";
 import socket from "../socket";
@@ -18,7 +18,7 @@ function MainPage () {
 
     const {dialogs, activeDialog, dialogsOrder} = useSelector(({dialog}) => dialog)
     const {token, userId, role, photo, language} = useSelector(({user}) => user.userData)
-    const {infoAboutUser} = useSelector(({user}) => user)
+    const {infoAboutUser, dialogSearch} = useSelector(({user}) => user)
 
     const alert = useAlert()
 
@@ -249,7 +249,12 @@ function MainPage () {
                                         }
                                     </div>
                                     <Search/>
-                                    <Dialogs/>
+                                    { dialogSearch
+                                        ?
+                                        <DialogsSearch/>
+                                        :
+                                        <Dialogs/>
+                                    }
                                 </div>
                             }
                         </div>
