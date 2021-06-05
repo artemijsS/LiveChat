@@ -75,8 +75,8 @@ const Dialogs = () => {
             }
             {dialogsOrder.length === 0 &&
                 <div className="no_chat">
-                    <p>You don't have any active chats yet.</p>
-                    <p>Use search to find friends!</p>
+                    <p>{translate[userData.language].noChat1}</p>
+                    <p>{translate[userData.language].noChat2}</p>
                 </div>
             }
 
@@ -102,18 +102,24 @@ const getDate = (date_obj = new Date()) => {
 const translate = {
     LV: {
         yesterday: "vakar",
+        noChat1: "Jums vēl nav nevienas aktīvas tērzēšanas",
+        noChat2: "Izmantojiet meklēšanu, lai atrastu draugus!",
         ok: "OK",
         cancel: "ATCELT",
         error: "Kļūda"
     },
     RU: {
         yesterday: "вчера",
+        noChat1: "У вас еще нет активных чатов",
+        noChat2: "Используйте поиск, чтобы найти друзей!",
         ok: "OK",
         cancel: "ОТМЕНА",
         error: "Ошибка"
     },
     EN: {
         yesterday: "yesterday",
+        noChat1: "You don't have any active chats yet",
+        noChat2: "Use search to find friends!",
         ok: "OK",
         cancel: "CANCEL",
         error: "Error"
