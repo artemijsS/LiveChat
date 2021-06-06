@@ -33,6 +33,13 @@ const DialogsSearch = () => {
         setToday(getDate())
     }, [dialogSearch])
 
+    useEffect(() => {
+        const elems = document.querySelectorAll(".yesterday-dialogs-change");
+        for (let i = 0; i < elems.length; i++) {
+            elems[i].innerHTML = translate[userData.language].yesterday;
+        }
+    }, [userData.language])
+
     const setActiveDialog = (id) => {
         dispatch(activeDialogSet(id))
     }
@@ -65,7 +72,7 @@ const DialogsSearch = () => {
                                         <div style={obj.deleted && {color: "rgb(214,48,46)"}} className={`dialog-name big-text ${obj.dialog.last_message_owner !== userData.userId && !obj.dialog.last_message_status ? "bold" : ""}`}>
                                             {obj.name}
                                         </div>
-                                        <div className={`mssg-time ${obj.dialog.last_message_owner !== userData.userId && !obj.dialog.last_message_status ? "black bold" : ""}`}>
+                                        <div className={`mssg-time ${obj.dialog.last_message_owner !== userData.userId && !obj.dialog.last_message_status ? "black bold" : ""} ${obj.dialog.last_message_time === translate["LV"].yesterday || obj.dialog.last_message_time === translate["RU"].yesterday || obj.dialog.last_message_time === translate["EN"].yesterday ? "yesterday-dialogs-change" : "" }`}>
                                             {obj.dialog.last_message_time ? obj.dialog.last_message_time.split(' ')[i] : ""}
                                         </div>
                                     </div>

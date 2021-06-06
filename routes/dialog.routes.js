@@ -83,7 +83,7 @@ router.post('/search', auth, async (req, res) => {
         if (!user) {
             return res.status(401).json({message: "No Auth"})
         }
-        console.log(telephone)
+
         const dialogsAr = user.dialogs
 
         const dialogs = await Dialog.find({'_id': { $in: dialogsAr }}).sort({last_message_created_at: -1})
