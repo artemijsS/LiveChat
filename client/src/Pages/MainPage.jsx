@@ -39,7 +39,7 @@ function MainPage () {
         setActiveFindNewDialog(false)
         dispatch(messageNewDelete())
         if (activeDialog) {
-            if (!dialogs[activeDialog].deleted)
+            if (!dialogs[activeDialog].deleted && dialogs[activeDialog].dialog.last_message_owner !== userId)
                 socket.emit('messageAllStatus', {dialogId: activeDialog, id: userId})
             if (dialogs[activeDialog].dialog.last_message_owner !== userId)
                 dispatch(dialogLastMessageStatusSet(activeDialog))
