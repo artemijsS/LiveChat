@@ -74,7 +74,7 @@ function MainPage () {
         input.value = ""
 
         if (dialogs[activeDialog].deleted) {
-            alert.show('THIS CHAT IS DELETED YOU CANT SEND MESSAGES')
+            alert.show(translate[language].errorMsgDel)
             return false
         }
 
@@ -85,14 +85,14 @@ function MainPage () {
         }
 
         if (!messageText) {
-            alert.show('Enter the message text')
+            alert.show(translate[language].errorMsgEnter)
             return false
         }
 
         axios.post("/api/message/new", message, { headers: { Authorization: `Bearer ${token}` }}).then(message => {
             socket.emit('newMessage', message.data)
         }, () => {
-            alert.show('Error with sending message')
+            alert.show(translate[language].errorMsg)
         })
 
         const date = getDate();
@@ -348,7 +348,10 @@ const translate = {
         enterMessage: "Ievadiet ziņojumu",
         ok: "OK",
         cancel: "ATCELT",
-        error: "Kļūda"
+        error: "Kļūda",
+        errorMsg: "Sūtot ziņojumu, radās kļūda",
+        errorMsgEnter: "Ievadiet ziņojuma tekstu",
+        errorMsgDel: "Šī tērzēšana ir izdzēsta, un jūs nevarat nosūtīt ziņojumus"
     },
     RU: {
         languageBox: {
@@ -365,7 +368,10 @@ const translate = {
         enterMessage: "Введите сообщение",
         ok: "OK",
         cancel: "ОТМЕНА",
-        error: "Ошибка"
+        error: "Ошибка",
+        errorMsg: "Ошибка при отправке сообщения",
+        errorMsgEnter: "Введите текст сообщения",
+        errorMsgDel: "ЭТОТ ЧАТ УДАЛЕН ВЫ НЕ МОЖЕТЕ ОТПРАВЛЯТЬ СООБЩЕНИЯ"
     },
     EN: {
         languageBox: {
@@ -382,6 +388,9 @@ const translate = {
         enterMessage: "Enter a message",
         ok: "OK",
         cancel: "CANCEL",
-        error: "Error"
+        error: "Error",
+        errorMsg: "Error with sending message",
+        errorMsgEnter: "Enter the message text",
+        errorMsgDel: "THIS CHAT IS DELETED YOU CANT SEND MESSAGES"
     }
 }
