@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Image} from "cloudinary-react";
-import {infoAboutUserSet} from "../redux/actions/user";
+import {infoAboutUserSet, logoutUser} from "../redux/actions/user";
 import axios from "axios";
 import {useAlert} from "react-alert";
 import {createDialog, deleteDialog} from "../redux/actions/dialog";
@@ -36,9 +36,16 @@ const UserInfo = () => {
                 setEmail(res.data.email)
                 setAbout(res.data.description)
                 setLoading(false)
-            }, () => {
-                setLoading(false)
-                alert.show(translate[language].error)
+            }, (err) => {
+                if (err.response.status === 401) {
+                    alert.show(translate[language].errorAuth)
+                    setTimeout(() => {
+                        dispatch(logoutUser())
+                    }, 1500)
+                } else {
+                    setLoading(false)
+                    alert.show(translate[language].error)
+                }
             })
         } else {
             if (activeDialog) {
@@ -159,7 +166,8 @@ const translate = {
         ok: "OK",
         cancel: "ATCELT",
         error: "Kļūda",
-        none: "nav"
+        none: "nav",
+        errorAuth: "Autorizācijas periods ir beidzies"
     },
     RU: {
         profileInfo: "Информация о профиле",
@@ -175,7 +183,8 @@ const translate = {
         ok: "OK",
         cancel: "ОТМЕНА",
         error: "Ошибка",
-        none: "пусто"
+        none: "пусто",
+        errorAuth: "Истек срок авторизации"
     },
     EN: {
         profileInfo: "Profile Info",
@@ -191,6 +200,7 @@ const translate = {
         ok: "OK",
         cancel: "CANCEL",
         error: "Error",
-        none: "none"
+        none: "none",
+        errorAuth: "Authorization period expired"
     }
 }

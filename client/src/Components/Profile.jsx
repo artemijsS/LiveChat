@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {updateAbout, updateName, updatePhoto} from "../redux/actions/user";
+import {logoutUser, updateAbout, updateName, updatePhoto} from "../redux/actions/user";
 import axios from "axios";
 import {useAlert} from "react-alert";
 import {Image} from "cloudinary-react";
@@ -29,10 +29,17 @@ const Profile = () => {
             axios.post('/api/user/updateName', {name: nameInput}, { headers: { Authorization: `Bearer ${token}` }}).then((res) => {
                 dispatch(updateName(res.data.name))
                 alert.success(translate[language].nameWasChanged)
-            }, () => {
-                alert.show(translate[language].namCanNotBeEmpty)
-                const inName = document.getElementById('nameInput')
-                inName.value = name
+            }, (err) => {
+                if (err.response.status === 401) {
+                    alert.show(translate[language].errorAuth)
+                    setTimeout(() => {
+                        dispatch(logoutUser())
+                    }, 1500)
+                } else {
+                    alert.show(translate[language].namCanNotBeEmpty)
+                    const inName = document.getElementById('nameInput')
+                    inName.value = name
+                }
             })
         }
     }
@@ -43,10 +50,17 @@ const Profile = () => {
             axios.post('/api/user/updateAbout', {about: aboutInput}, { headers: { Authorization: `Bearer ${token}` }}).then((res) => {
                 dispatch(updateAbout(res.data.about))
                 alert.success(translate[language].aboutWasChanged)
-            }, () => {
-                alert.show(translate[language].error)
-                const inAbout = document.getElementById('aboutInput')
-                inAbout.value = description
+            }, (err) => {
+                if (err.response.status === 401) {
+                    alert.show(translate[language].errorAuth)
+                    setTimeout(() => {
+                        dispatch(logoutUser())
+                    }, 1500)
+                } else {
+                    alert.show(translate[language].error)
+                    const inAbout = document.getElementById('aboutInput')
+                    inAbout.value = description
+                }
             })
         }
     }
@@ -69,9 +83,16 @@ const Profile = () => {
             dispatch(updatePhoto(res.data.photo))
             alert.success(translate[language].photoWasChanged)
             setLoadingPhoto(false)
-        }, () => {
-            alert.show(translate[language].error)
-            setLoadingPhoto(false)
+        }, (err) => {
+            if (err.response.status === 401) {
+                alert.show(translate[language].errorAuth)
+                setTimeout(() => {
+                    dispatch(logoutUser())
+                }, 1500)
+            } else {
+                alert.show(translate[language].error)
+                setLoadingPhoto(false)
+            }
         })
     };
 
@@ -149,7 +170,8 @@ const translate = {
         telephone: "Tālrunis",
         ok: "OK",
         cancel: "ATCELT",
-        error: "Kļūda"
+        error: "Kļūda",
+        errorAuth: "Autorizācijas periods ir beidzies"
     },
     RU: {
         aboutWasChanged: "Описание было изменено",
@@ -163,7 +185,8 @@ const translate = {
         telephone: "Телефон",
         ok: "OK",
         cancel: "ОТМЕНА",
-        error: "Ошибка"
+        error: "Ошибка",
+        errorAuth: "Истек срок авторизации"
     },
     EN: {
         aboutWasChanged: "Description was changed",
@@ -177,6 +200,7 @@ const translate = {
         telephone: "Telephone",
         ok: "OK",
         cancel: "CANCEL",
-        error: "Error"
+        error: "Error",
+        errorAuth: "Authorization period expired"
     }
 }

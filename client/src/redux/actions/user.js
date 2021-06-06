@@ -1,5 +1,5 @@
 import {setUserLoading} from './loading';
-import {dialogsFetch} from './dialog';
+import {dialogsFetch, activeDialogSet} from './dialog';
 import socket from "../../socket";
 
 export const userDataFetch = (obj, path) => {
@@ -52,7 +52,7 @@ export const getProfileFetch = () => {
     return dispatch => {
         const token = localStorage.token;
         let language = localStorage.language;
-        if (!language) {
+        if (!language || language === "undefined") {
             dispatch(changeUserLanguage("EN"))
         } else {
             dispatch(changeUserLanguage(language))
@@ -100,6 +100,14 @@ export const getProfileFetch = () => {
 }
 
 export const logoutUser = () => {
+    return dispatch => {
+        dispatch(activeDialogSet(''))
+        dispatch(infoAboutUserSet({bool: false, id: null, dialogId: null}))
+        dispatch(logout())
+    }
+}
+
+export const logout = () => {
     localStorage.removeItem("token")
     return {
         type: 'USER_LOGOUT'

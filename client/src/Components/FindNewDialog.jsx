@@ -2,12 +2,14 @@ import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 import axios from "axios";
 import {Image} from "cloudinary-react";
-import {infoAboutUserSet} from "../redux/actions/user";
+import {infoAboutUserSet, logoutUser} from "../redux/actions/user";
+import {useAlert} from "react-alert";
 
 
 const FindNewDialog = () => {
 
     const dispatch = useDispatch();
+    const alert = useAlert()
 
     const {token, language} = useSelector(({user}) => user.userData)
     const {infoAboutUser} = useSelector(({user}) => user)
@@ -18,6 +20,15 @@ const FindNewDialog = () => {
         if (search.length > 1)
             axios.post("/api/user/find", {telephone: search},{ headers: { Authorization: `Bearer ${token}` }}).then(res => {
                 setDialogs(res.data)
+            }, (err) => {
+                if (err.response.status === 401) {
+                    alert.show(translate[language].errorAuth)
+                    setTimeout(() => {
+                        dispatch(logoutUser())
+                    }, 1500)
+                } else {
+                    alert.show(translate[language].error)
+                }
             })
     }
 
@@ -65,18 +76,21 @@ const translate = {
         inputPlaceholder: "Sākt jaunu dialogu - ievadiet tālruni",
         ok: "OK",
         cancel: "ATCELT",
-        error: "Kļūda"
+        error: "Kļūda",
+        errorAuth: "Autorizācijas periods ir beidzies"
     },
     RU: {
         inputPlaceholder: "Начать новый диалог - введите телефон",
         ok: "OK",
         cancel: "ОТМЕНА",
-        error: "Ошибка"
+        error: "Ошибка",
+        errorAuth: "Истек срок авторизации"
     },
     EN: {
         inputPlaceholder: "Start new dialog - enter telephone",
         ok: "OK",
         cancel: "CANCEL",
-        error: "Error"
+        error: "Error",
+        errorAuth: "Authorization period expired"
     }
 }

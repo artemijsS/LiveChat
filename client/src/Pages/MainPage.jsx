@@ -91,8 +91,15 @@ function MainPage () {
 
         axios.post("/api/message/new", message, { headers: { Authorization: `Bearer ${token}` }}).then(message => {
             socket.emit('newMessage', message.data)
-        }, () => {
-            alert.show(translate[language].errorMsg)
+        }, (err) => {
+            if (err.response.status === 401) {
+                alert.show(translate[language].errorAuth)
+                setTimeout(() => {
+                    dispatch(logoutUser())
+                }, 1500)
+            } else {
+                alert.show(translate[language].errorMsg)
+            }
         })
 
         const date = getDate();
@@ -132,8 +139,15 @@ function MainPage () {
             dispatch(changeUserLanguage(res.data.language))
             alert.success(translate[languageTMP].languageBox.notification)
             setLanguageChoose(false)
-        }, () => {
-            alert.show(translate[language].error)
+        }, (err) => {
+            if (err.response.status === 401) {
+                alert.show(translate[language].errorAuth)
+                setTimeout(() => {
+                    dispatch(logoutUser())
+                }, 1500)
+            } else {
+                alert.show(translate[language].error)
+            }
         })
     }
 
@@ -351,7 +365,8 @@ const translate = {
         error: "Kļūda",
         errorMsg: "Sūtot ziņojumu, radās kļūda",
         errorMsgEnter: "Ievadiet ziņojuma tekstu",
-        errorMsgDel: "Šī tērzēšana ir izdzēsta, un jūs nevarat nosūtīt ziņojumus"
+        errorMsgDel: "Šī tērzēšana ir izdzēsta, un jūs nevarat nosūtīt ziņojumus",
+        errorAuth: "Autorizācijas periods ir beidzies"
     },
     RU: {
         languageBox: {
@@ -371,7 +386,8 @@ const translate = {
         error: "Ошибка",
         errorMsg: "Ошибка при отправке сообщения",
         errorMsgEnter: "Введите текст сообщения",
-        errorMsgDel: "ЭТОТ ЧАТ УДАЛЕН ВЫ НЕ МОЖЕТЕ ОТПРАВЛЯТЬ СООБЩЕНИЯ"
+        errorMsgDel: "ЭТОТ ЧАТ УДАЛЕН ВЫ НЕ МОЖЕТЕ ОТПРАВЛЯТЬ СООБЩЕНИЯ",
+        errorAuth: "Истек срок авторизации"
     },
     EN: {
         languageBox: {
@@ -391,6 +407,7 @@ const translate = {
         error: "Error",
         errorMsg: "Error with sending message",
         errorMsgEnter: "Enter the message text",
-        errorMsgDel: "THIS CHAT IS DELETED YOU CANT SEND MESSAGES"
+        errorMsgDel: "THIS CHAT IS DELETED YOU CANT SEND MESSAGES",
+        errorAuth: "Authorization period expired"
     }
 }

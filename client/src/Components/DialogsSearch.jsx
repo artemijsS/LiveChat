@@ -4,6 +4,7 @@ import {activeDialogSet} from "../redux/actions/dialog";
 import {Image} from "cloudinary-react";
 import axios from "axios";
 import {useAlert} from "react-alert";
+import {logoutUser} from "../redux/actions/user";
 
 const DialogsSearch = () => {
 
@@ -23,8 +24,15 @@ const DialogsSearch = () => {
         axios.post("/api/dialog/search", { search: dialogSearch }, { headers: { Authorization: `Bearer ${userData.token}` }}).then(res => {
             setDialogsIds(res.data.answer)
             setLoading(false);
-        }, () => {
-            alert.show(translate[userData.language].error)
+        }, (err) => {
+            if (err.response.status === 401) {
+                alert.show(translate[userData.language].errorAuth)
+                setTimeout(() => {
+                    dispatch(logoutUser())
+                }, 1500)
+            } else {
+                alert.show(translate[userData.language].error)
+            }
         })
         let yesterday = new Date()
         yesterday.setDate(yesterday.getDate() - 1)
@@ -132,7 +140,8 @@ const translate = {
         noChat2: "Izmantojiet meklēšanu, lai atrastu draugus!",
         ok: "OK",
         cancel: "ATCELT",
-        error: "Kļūda"
+        error: "Kļūda",
+        errorAuth: "Autorizācijas periods ir beidzies"
     },
     RU: {
         yesterday: "вчера",
@@ -140,7 +149,8 @@ const translate = {
         noChat2: "Используйте поиск, чтобы найти друзей!",
         ok: "OK",
         cancel: "ОТМЕНА",
-        error: "Ошибка"
+        error: "Ошибка",
+        errorAuth: "Истек срок авторизации"
     },
     EN: {
         yesterday: "yesterday",
@@ -148,6 +158,7 @@ const translate = {
         noChat2: "Use search to find friends!",
         ok: "OK",
         cancel: "CANCEL",
-        error: "Error"
+        error: "Error",
+        errorAuth: "Authorization period expired"
     }
 }

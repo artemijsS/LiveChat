@@ -1,8 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import axios from "axios";
+import {useAlert} from "react-alert";
+import {logoutUser} from "../redux/actions/user";
 
 const Chat = () => {
+
+    const dispatch = useDispatch()
 
     const {activeDialog, dialogs} = useSelector(({dialog}) => dialog)
     const {token, userId, language} = useSelector(({user}) => user.userData)
@@ -11,13 +15,20 @@ const Chat = () => {
     const [messages, setMessages] = useState([])
     const [loading, setLoading] = useState(true)
 
+    const alert = useAlert()
+
     useEffect(() => {
         setLoading(true)
         axios.get(`/api/message/find/${activeDialog}`, { headers: { Authorization: `Bearer ${token}` } }).then(res => {
             setMessages(res.data)
             setLoading(false)
         }, err => {
-            console.log(err)
+            if (err.response.status === 401) {
+                alert.show(translate[language].errorAuth)
+                setTimeout(() => {
+                    dispatch(logoutUser())
+                }, 1500)
+            }
             setLoading(false)
         })
     }, [activeDialog, token])
@@ -140,7 +151,8 @@ const translate = {
         yesterday: "VAKAR",
         ok: "OK",
         cancel: "ATCELT",
-        error: "Kļūda"
+        error: "Kļūda",
+        errorAuth: "Autorizācijas periods ir beidzies"
     },
     RU: {
         deletedNotification: "УДАЛИЛ ЭТОТ ЧАТ - ВЫ НЕ МОЖЕТЕ ОТПРАВЛЯТЬ СООБЩЕНИЯ",
@@ -148,7 +160,8 @@ const translate = {
         yesterday: "ВЧЕРА",
         ok: "OK",
         cancel: "ОТМЕНА",
-        error: "Ошибка"
+        error: "Ошибка",
+        errorAuth: "Истек срок авторизации"
     },
     EN: {
         deletedNotification: "DELETED THIS CHAT - YOU CAN'T SEND MESSAGES",
@@ -156,6 +169,7 @@ const translate = {
         yesterday: "YESTERDAY",
         ok: "OK",
         cancel: "CANCEL",
-        error: "Error"
+        error: "Error",
+        errorAuth: "Authorization period expired"
     }
 }
