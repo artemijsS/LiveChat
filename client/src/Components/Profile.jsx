@@ -100,11 +100,11 @@ const Profile = () => {
         <div className="profile">
             <div className="image">
                 <input ref={imageInput} onChange={changeImage} style={{display: "none"}} type="file" accept="image/*"/>
-                <div className="changePhoto">
-                    {translate[language].changePhoto}
+                <div onClick={() => imageInput.current.click()} className="changePhoto">
+                    <span>{translate[language].changePhoto}</span>
                 </div>
 
-                <Image onClick={() => imageInput.current.click()} cloudName="artemijss" publicId={photo ? photo : "tkixqcinuntqmalr2dej"}/>
+                <Image cloudName="artemijss" publicId={photo ? photo : "tkixqcinuntqmalr2dej"}/>
                 { loadingPhoto &&
                     <div className="loadingChatBlock">
                         <div className="spinner spinner-1"/>

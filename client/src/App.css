@@ -359,9 +359,29 @@ button:hover {
   cursor: pointer;
 }
 .changePhoto {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 200px;
+  height: 200px;
+  border-radius: 100px;
+  border: 1px solid transparent;
   position: absolute;
-  top:45%;
-  color: #555555;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+}
+.changePhoto span {
+  display: none;
+  text-align: center;
+}
+.changePhoto:hover {
+  cursor: pointer;
+  background-color: rgba(0,0,0,0.3);
+}
+.changePhoto:hover span {
+  display: block;
 }
 .profile .image .loadingChatBlock {
   position: absolute;
