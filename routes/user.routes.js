@@ -30,7 +30,7 @@ router.post('/find', auth, async (req, res) => {
 router.get('/find/:id', auth, async (req, res) => {
 
     try {
-        const user = await User.findById(req.params.id, 'name status photo telephone email about')
+        const user = await User.findById(req.params.id, 'name status photo telephone email description')
 
         res.json(user)
     } catch (e) {

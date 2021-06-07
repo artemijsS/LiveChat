@@ -20,6 +20,8 @@ app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/dialog', require('./routes/dialog.routes'));
 // user
 app.use('/api/user', require('./routes/user.routes'));
+// user admin
+app.use('/api/user/admin', require('./routes/user.admin.routes'));
 // message
 app.use('/api/message', require('./routes/message.routes'));
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom'
 
-import {MainPage, AuthPage, RegisterPage, LoadingPage} from  "./Pages";
+import {MainPage, AuthPage, RegisterPage, LoadingPage, AdminPage} from "./Pages";
 
 import {useSelector} from "react-redux";
 
@@ -30,7 +30,7 @@ export const useRoutes = () => {
                     {
                         userData.role === "admin" &&
                         <Route path="/admin" exact>
-                            <div>ADMINKA</div>
+                            <AdminPage/>
                         </Route>
                     }
                     <Redirect to="/"/>

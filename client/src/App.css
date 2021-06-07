@@ -214,6 +214,9 @@ button:hover {
 .box-header .padding {
   padding-right: 15px;
 }
+.box-header.admin .settings {
+  width: 40px;
+}
 
 .settings {
   width: 140px;
@@ -251,6 +254,9 @@ button:hover {
   flex-direction: column;
   z-index: 6;
   font-size: 15px;
+}
+.box-header.admin .settingsPopUp {
+  height: 100px;
 }
 
 .settingsLink {
@@ -429,7 +435,7 @@ button:hover {
 .profile .update svg {
   color: rgb(145,145,145);
 }
-.profile .info {
+.profile .info, .profile .infoA {
   height: 40px;
   margin: 4px 20px 28px 30px;
 }
@@ -803,6 +809,9 @@ button:hover {
   margin-top: -50px;
 }
 
+.loadingChatBlock.admin {
+  margin-top: 50px;
+}
 
 /*LOADING*/
 
