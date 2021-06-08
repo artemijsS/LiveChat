@@ -435,9 +435,14 @@ button:hover {
 .profile .update svg {
   color: rgb(145,145,145);
 }
-.profile .info, .profile .infoA {
+.profile .info {
   height: 40px;
   margin: 4px 20px 28px 30px;
+}
+.profile .infoA {
+  height: 40px;
+  margin-left: 30px;
+  margin-bottom: 10px;
 }
 
 /*search*/

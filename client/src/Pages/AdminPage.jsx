@@ -208,7 +208,7 @@ function AdminPage () {
                 } else if (err.response.status === 400) {
                     alert.show(err.response.data.message)
                 } else if (err.response.status === 500) {
-                    alert.show(translate[language].errorUniqueTel)
+                    alert.show(translate[language].errorUniqueEm)
                 } else {
                     alert.show(translate[language].error)
                 }
@@ -358,6 +358,11 @@ function AdminPage () {
                                                 </div>
                                                 }
                                             </div>
+                                            <div className="infoA">
+                                                {
+                                                    user.status ? translate[language].online : translate[language].offline
+                                                }
+                                            </div>
                                             <div className="name">
                                                 <span>{translate[language].name}</span>
                                                 <div className={inputName ? "update" : " update borderBottom"}>
@@ -369,23 +374,6 @@ function AdminPage () {
                                                         </div>
                                                         :
                                                         <div onClick={() => changeName(user._id)}>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M9 17.2l-4-4-1.4 1.3L9 19.9 20.4 8.5 19 7.1 9 17.2z"/></svg>
-                                                        </div>
-                                                    }
-                                                </div>
-                                            </div>
-                                            <div className="infoA"/>
-                                            <div className="about">
-                                                <span>{translate[language].about}</span>
-                                                <div className={inputAbout ? "update" : " update borderBottom"}>
-                                                    <input id="aboutInput" onChange={(e) => {setAboutInput(e.target.value)}} type="text" defaultValue={user.description} placeholder={translate[language].aboutPlaceholder} readOnly={inputAbout}/>
-                                                    { inputAbout
-                                                        ?
-                                                        <div onClick={() => {setInputAbout(false)}}>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M3.95 16.7v3.4h3.4l9.8-9.9-3.4-3.4-9.8 9.9zm15.8-9.1c.4-.4.4-.9 0-1.3l-2.1-2.1c-.4-.4-.9-.4-1.3 0l-1.6 1.6 3.4 3.4 1.6-1.6z"/></svg>
-                                                        </div>
-                                                        :
-                                                        <div onClick={() => {changeAbout(user._id)}}>
                                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M9 17.2l-4-4-1.4 1.3L9 19.9 20.4 8.5 19 7.1 9 17.2z"/></svg>
                                                         </div>
                                                     }
@@ -423,12 +411,21 @@ function AdminPage () {
                                                     }
                                                 </div>
                                             </div>
-
-
-                                            <div className="status">
-                                                {
-                                                    user.status ? translate[language].online : translate[language].offline
-                                                }
+                                            <div className="about">
+                                                <span>{translate[language].about}</span>
+                                                <div className={inputAbout ? "update" : " update borderBottom"}>
+                                                    <input id="aboutInput" onChange={(e) => {setAboutInput(e.target.value)}} type="text" defaultValue={user.description} placeholder={translate[language].aboutPlaceholder} readOnly={inputAbout}/>
+                                                    { inputAbout
+                                                        ?
+                                                        <div onClick={() => {setInputAbout(false)}}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M3.95 16.7v3.4h3.4l9.8-9.9-3.4-3.4-9.8 9.9zm15.8-9.1c.4-.4.4-.9 0-1.3l-2.1-2.1c-.4-.4-.9-.4-1.3 0l-1.6 1.6 3.4 3.4 1.6-1.6z"/></svg>
+                                                        </div>
+                                                        :
+                                                        <div onClick={() => {changeAbout(user._id)}}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M9 17.2l-4-4-1.4 1.3L9 19.9 20.4 8.5 19 7.1 9 17.2z"/></svg>
+                                                        </div>
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
 
