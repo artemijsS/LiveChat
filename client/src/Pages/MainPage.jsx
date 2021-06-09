@@ -10,6 +10,7 @@ import {dialogLastMessageSet, dialogLastMessageStatusSet, dialogOrderChange} fro
 import {Link} from 'react-router-dom'
 import {changeUserLanguage, infoAboutUserSet, logoutUser} from "../redux/actions/user";
 import {Image} from "cloudinary-react";
+import image from "../Components/images/image.png"
 
 
 function MainPage () {
@@ -308,7 +309,12 @@ function MainPage () {
                             </div>
                         }
                         { !activeDialog && !userInfo &&
-                            <div className="chat-bar"/>
+                            <div className="chat-bar">
+                                <div className="empty-bar">
+                                    <img src={image} alt="img"/>
+                                    <div>LiveChat</div>
+                                </div>
+                            </div>
                         }
                         { userInfo &&
                             <UserInfo/>
