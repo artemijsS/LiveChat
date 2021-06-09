@@ -328,7 +328,7 @@ function AdminPage () {
                                 })
                             }
                             { users.length === 0 && !loadingUser &&
-                                <div>NOPE</div>
+                                <div/>
                             }
                         </div>
                         {activeDialog &&
