@@ -32,7 +32,7 @@ export default Search;
 
 const translate = {
     LV: {
-        inputPlaceholder: "Meklēt draugu pēs telefona",
+        inputPlaceholder: "Meklēt draugu pēc telefona",
         ok: "OK",
         cancel: "ATCELT",
         error: "Kļūda"
